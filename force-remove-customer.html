@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force Remove Customer Account - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #dc3545;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        h1 { color: #2c3e50; margin-bottom: 20px; }
+        .account-list {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .account-item {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 3px;
+            border-left: 4px solid #007bff;
+        }
+        .account-item.admin {
+            border-left-color: #28a745;
+        }
+        .account-item.customer {
+            border-left-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Force Remove Customer Account</h1>
+        <div class="spinner"></div>
+        <div id="status" class="status warning">Force removing customer account...</div>
+        <div id="details"></div>
+    </div>
+
+    <script>
+        // Force remove customer account immediately on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusDiv = document.getElementById('status');
+            const detailsDiv = document.getElementById('details');
+            
+            setTimeout(() => {
+                try {
+                    // Get users from localStorage
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    const adminEmail = 'charlesluhanga77@gmail.com';
+                    
+                    console.log('🔍 Force checking all accounts...');
+                    console.log('Total users:', users.length);
+                    
+                    let details = '<h3>📊 Current Account Status:</h3>';
+                    details += '<div class="account-list">';
+                    
+                    // Show all accounts before removal
+                    users.forEach(user => {
+                        const roleClass = user.role === 'admin' ? 'admin' : 'customer';
+                        const roleIcon = user.role === 'admin' ? '👤' : '🛍️';
+                        details += `
+                            <div class="account-item ${roleClass}">
+                                ${roleIcon} ${user.email}<br>
+                                🎭 Role: ${user.role}<br>
+                                🆔 ID: ${user.id}
+                            </div>
+                        `;
+                    });
+                    
+                    details += '</div>';
+                    
+                    // Find and remove ALL customer accounts with admin email
+                    const customerAccountsToRemove = users.filter(u => u.email === adminEmail && u.role === 'customer');
+                    const adminAccountsToKeep = users.filter(u => u.email === adminEmail && u.role === 'admin');
+                    const otherUsers = users.filter(u => u.email !== adminEmail);
+                    
+                    console.log('Customer accounts to remove:', customerAccountsToRemove.length);
+                    console.log('Admin accounts to keep:', adminAccountsToKeep.length);
+                    console.log('Other users:', otherUsers.length);
+                    
+                    // Force remove customer accounts
+                    const finalUsers = [...adminAccountsToKeep, ...otherUsers];
+                    
+                    details += '<h3>🗑️ Removal Actions:</h3>';
+                    details += '<div class="account-list">';
+                    
+                    if (customerAccountsToRemove.length > 0) {
+                        customerAccountsToRemove.forEach(user => {
+                            details += `
+                                <div class="account-item customer" style="background: #ffebee;">
+                                    ❌ REMOVED: ${user.email}<br>
+                                    🎭 Role: ${user.role}<br>
+                                    🆔 ID: ${user.id}
+                                </div>
+                            `;
+                        });
+                    } else {
+                        details += '<div class="status success">✅ No customer accounts found to remove</div>';
+                    }
+                    
+                    details += '</div>';
+                    
+                    // Save back to localStorage
+                    localStorage.setItem('users', JSON.stringify(finalUsers));
+                    
+                    // Clear session completely
+                    localStorage.removeItem('userSession');
+                    localStorage.removeItem('verificationCode');
+                    
+                    // Show final result
+                    details += '<h3>✅ Final Result:</h3>';
+                    details += '<div class="account-list">';
+                    
+                    finalUsers.forEach(user => {
+                        const roleClass = user.role === 'admin' ? 'admin' : 'customer';
+                        const roleIcon = user.role === 'admin' ? '👤' : '🛍️';
+                        details += `
+                            <div class="account-item ${roleClass}">
+                                ✅ KEPT: ${user.email}<br>
+                                🎭 Role: ${user.role}<br>
+                                🆔 ID: ${user.id}
+                            </div>
+                        `;
+                    });
+                    
+                    details += '</div>';
+                    
+                    // Show success
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `✅ Force removed ${customerAccountsToRemove.length} customer account(s)!`;
+                    
+                    details += `
+                        <div class="status success" style="margin-top: 20px;">
+                            <strong>🎯 Force Removal Complete!</strong><br>
+                            🗑️ Removed ${customerAccountsToRemove.length} customer account(s)<br>
+                            👤 Kept ${adminAccountsToKeep.length} admin account(s)<br>
+                            👥 Kept ${otherUsers.length} other user(s)<br>
+                            🔐 Session completely cleared<br>
+                            🚀 Ready to login as admin
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button onclick="deleteAllAccounts()" style="background: #dc3545; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">
+                                🗑️ Delete ALL Accounts
+                            </button>
+                            <a href="login.html" style="background: #28a745; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 5px;">
+                                🔐 Go to Login Page
+                            </a>
+                        </div>
+                    `;
+                    
+                    detailsDiv.innerHTML = details;
+                    
+                    console.log('✅ Force removal complete!');
+                    console.log('Final users count:', finalUsers.length);
+                    
+                } catch (error) {
+                    statusDiv.className = 'status error';
+                    statusDiv.innerHTML = '❌ Error during force removal';
+                    detailsDiv.innerHTML = `<div class="status error">${error.message}</div>`;
+                }
+            }, 2000);
+        });
+        
+        // Delete all accounts function
+        function deleteAllAccounts() {
+            if (confirm('⚠️ This will delete ALL user accounts including admin. Are you sure?')) {
+                // Clear all users
+                localStorage.removeItem('users');
+                localStorage.removeItem('userSession');
+                localStorage.removeItem('verificationCode');
+                
+                // Show result
+                const detailsDiv = document.getElementById('details');
+                detailsDiv.innerHTML = `
+                    <div class="status error">
+                        <strong>🗑️ All Accounts Deleted!</strong><br>
+                        👥 Total users: 0<br>
+                        🔐 Session cleared<br>
+                        🚀 Ready to create fresh admin account
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button onclick="createFreshAdmin()" style="background: #28a745; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; margin: 5px;">
+                            👤 Create Fresh Admin Account
+                        </button>
+                        <a href="login.html" style="background: #007bff; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 5px;">
+                            🔐 Go to Login Page
+                        </a>
+                    </div>
+                `;
+                
+                // Update status
+                const statusDiv = document.getElementById('status');
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '🗑️ All accounts deleted!';
+                
+                console.log('🗑️ All accounts deleted!');
+            }
+        }
+        
+        // Create fresh admin account
+        function createFreshAdmin() {
+            // Create fresh admin user
+            const adminUser = {
+                id: 'admin_001',
+                name: 'Admin User',
+                email: 'charlesluhanga77@gmail.com',
+                password: 'hashed_password_placeholder', // Will be set by auth.js
+                role: 'admin',
+                createdAt: new Date().toISOString()
+            };
+            
+            // Save admin user
+            localStorage.setItem('users', JSON.stringify([adminUser]));
+            
+            // Show result
+            const detailsDiv = document.getElementById('details');
+            detailsDiv.innerHTML = `
+                <div class="status success">
+                    <strong>👤 Fresh Admin Account Created!</strong><br>
+                    📧 Email: charlesluhanga77@gmail.com<br>
+                    🔐 Password: ChisomoXCharles08<br>
+                    🎭 Role: admin<br>
+                    🚀 Ready to login
+                </div>
+                <div style="margin-top: 20px;">
+                    <a href="login.html" style="background: #28a745; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                        🔐 Go to Login Page
+                    </a>
+                </div>
+            `;
+            
+            // Update status
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status success';
+            statusDiv.innerHTML = '✅ Fresh admin account created!';
+            
+            console.log('👤 Fresh admin account created!');
+        }
+    </script>
+</body>
+</html>

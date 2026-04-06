@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Charles Account - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        .danger-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 25px 50px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        .danger-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        h1 { color: #dc3545; margin-bottom: 30px; }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .account-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+            border: 2px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Remove Charles Account</h1>
+        
+        <div id="status" class="status warning">
+            This will completely remove charlesluhanga77@gmail.com from the system
+        </div>
+        
+        <div class="account-info">
+            <h3>📧 Account to Remove:</h3>
+            <p><strong>Email:</strong> charlesluhanga77@gmail.com</p>
+            <p><strong>Action:</strong> Complete removal from system</p>
+            <p><strong>Result:</strong> No accounts will remain</p>
+        </div>
+        
+        <button onclick="removeCharlesAccount()" class="danger-btn">
+            🗑️ REMOVE CHARLES ACCOUNT
+        </button>
+        
+        <button onclick="clearAllData()" class="danger-btn">
+            🧹 CLEAR ALL DATA
+        </button>
+        
+        <div id="result" style="margin-top: 30px;"></div>
+    </div>
+
+    <script>
+        function removeCharlesAccount() {
+            if (confirm('⚠️ This will completely remove charlesluhanga77@gmail.com from the system.\\n\\nNo accounts will remain after this.\\n\\nAre you absolutely sure?')) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const charlesEmail = 'charlesluhanga77@gmail.com';
+                
+                // Remove ALL accounts with charles email
+                const filteredUsers = users.filter(user => user.email !== charlesEmail);
+                
+                console.log('🔍 Removing Charles account...');
+                console.log('Before:', users.length, 'users');
+                console.log('After:', filteredUsers.length, 'users');
+                console.log('Removed:', users.length - filteredUsers.length, 'accounts');
+                
+                // Save filtered users
+                localStorage.setItem('users', JSON.stringify(filteredUsers));
+                
+                // Clear all session data
+                localStorage.removeItem('userSession');
+                localStorage.removeItem('verificationCode');
+                localStorage.removeItem('customerOrders');
+                localStorage.removeItem('adminNotifications');
+                localStorage.removeItem('adminProducts');
+                
+                showResult('Charles account completely removed!', 'success');
+            }
+        }
+        
+        function clearAllData() {
+            if (confirm('⚠️ This will clear ALL data from the system.\\n\\nEverything will be deleted.\\n\\nAre you absolutely sure?')) {
+                // Clear everything
+                localStorage.clear();
+                
+                showResult('All data cleared from system!', 'error');
+            }
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            const statusDiv = document.getElementById('status');
+            
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = message;
+            
+            resultDiv.innerHTML = `
+                <div class="status ${type}">
+                    ${type === 'success' ? '✅' : '❌'} ${message}
+                </div>
+                <div style="margin-top: 20px;">
+                    <button onclick="goToLogin()" class="success-btn" style="background: #28a745; padding: 15px 30px; font-size: 16px;">
+                        🔐 Go to Login Page
+                    </button>
+                </div>
+            `;
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        // Auto-run on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const charlesEmail = 'charlesluhanga77@gmail.com';
+            const charlesAccounts = users.filter(u => u.email === charlesEmail);
+            
+            const statusDiv = document.getElementById('status');
+            if (charlesAccounts.length > 0) {
+                statusDiv.innerHTML = `Found ${charlesAccounts.length} Charles account(s) in system`;
+            } else {
+                statusDiv.innerHTML = 'No Charles accounts found in system';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Striving Eagle - Fashion Store</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1><i class="fas fa-eagle"></i> Striving Eagle</h1>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="male.html" class="nav-link">Male</a>
+                <a href="female.html" class="nav-link">Female</a>
+                <a href="find-your-fit.html" class="nav-link">Find Your Fit</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                
+                <!-- Admin Dropdown -->
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="admin-dropdown">
+                        <i class="fas fa-user-shield"></i> Admin <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu" id="admin-menu">
+                        <a href="login.html" class="dropdown-item">
+                            <i class="fas fa-sign-in-alt"></i> Main Admin Login
+                        </a>
+                        <a href="admin/chrome-admin-new.html" class="dropdown-item">
+                            <i class="fas fa-chrome"></i> Chrome Admin Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search products...">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <button class="cart-btn" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Fly Higher in Style</h1>
+            <p>Discover bold fashion, modern streetwear, and stylish accessories designed for those who want to stand out. At Striving Eagle, we bring you the latest trends, quality clothing, and affordable Malawian prices — all in one place. Shop confidently and upgrade your style today.</p>
+            <p class="hero-subtitle">Upgrade your wardrobe with stylish clothing and accessories from Striving Eagle.</p>
+            <div class="hero-buttons">
+                <a href="male.html" class="btn btn-primary hero-btn">
+                    <i class="fas fa-shopping-bag"></i> Shop Male Collection
+                </a>
+                <a href="female.html" class="btn btn-secondary hero-btn">
+                    <i class="fas fa-shopping-bag"></i> Shop Female Collection
+                </a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Fashion Store">
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <div class="container">
+            <h2>Shop by Category</h2>
+            <div class="category-grid">
+                <div class="category-card male-category">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Male Fashion">
+                    </div>
+                    <div class="category-content">
+                        <h3>Men's Fashion</h3>
+                        <p>Premium denim and contemporary style for modern men</p>
+                        <a href="male.html" class="btn btn-outline">Shop Now</a>
+                    </div>
+                </div>
+                <div class="category-card female-category">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Female Fashion">
+                    </div>
+                    <div class="category-content">
+                        <h3>Female Collection</h3>
+                        <p>Elegant fashion for contemporary women</p>
+                        <a href="female.html" class="btn btn-outline">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>The Spirit of Malawian Style</h2>
+                    <p class="about-subtitle">At Striving Eagle, we believe that looking your best shouldn't be a luxury—it should be a standard.</p>
+                    <p>Founded in Malawi, our brand was born from a simple mission: to provide high-quality, modern streetwear and contemporary fashion that reflects the bold energy of our people.</p>
+                    
+                    <p>We don't just sell clothes; we curate confidence. From our premium denim to our elegant female collections, every piece is selected for those who aim higher. Whether you're navigating city streets or attending an exclusive event, Striving Eagle ensures you do it with unmatched style and quality.</p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <div class="about-icon">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <h3>Easy Shopping</h3>
+                            <p>We make shopping easy by supporting platforms you use every day:<br><strong>Airtel Money & TNM Mpamba</strong><br><strong>Bank Transfers (Standard Bank, NBS, National Bank)</strong></p>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <div class="about-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <h3>Perfect Fit Return Policy</h3>
+                            <p><strong>Not the right size? Don't worry.</strong><br><strong>7-Day Exchanges:</strong> If your item doesn't fit, you can exchange it for a different size within 7 days of receipt.<br><strong>Condition:</strong> Items must be unworn, unwashed, and have the original Striving Eagle tags attached.</p>
+                        </div>
+                        
+                        <div class="about-feature">
+                            <div class="about-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <h3>How to Start</h3>
+                            <p>Simply WhatsApp us at <a href="https://wa.me/26599921219" target="_blank"><strong>0999921219</strong></a> or <a href="https://wa.me/265883310709" target="_blank"><strong>0883 31 07 09</strong></a> and we'll handle the rest!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="about-cta">
+                        <h3>Fly Higher. Dress Better.</h3>
+                        <p class="about-note"><strong>Cash on Delivery (Available for select locations in Lilongwe/Blantyre).</strong></p>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Striving Eagle Fashion Store">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Products Section -->
+    <section class="latest-products">
+        <div class="container">
+            <h2>Latest Arrivals</h2>
+            <div class="product-grid" id="latest-products-grid">
+                <!-- Products will be loaded here -->
+            </div>
+            <div class="text-center">
+                <a href="latest.html" class="btn btn-primary">View All Latest Posts</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>Get in Touch</h2>
+                    <p>Ready to place an order or have questions? We're here to help!</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>0999921219 | 0883 31 07 09</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp: <a href="https://wa.me/26599921219" target="_blank">0999921219</a> | <a href="https://wa.me/265883310709" target="_blank">0883 31 07 09</a></span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Delivery across Malawi</span>
+                        </div>
+                    </div>
+                    <a href="contact.html" class="btn btn-primary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-eagle"></i> Striving Eagle</h3>
+                    <p>Fly Higher in Style — Trendy Fashion & Accessories in Malawi</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="male.html">Male Collection</a></li>
+                        <li><a href="female.html">Female Collection</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Delivery Info</h4>
+                    <p>We deliver across Malawi. Fast and reliable delivery service available.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Striving Eagle. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Shopping Cart</h3>
+                <button class="close-cart" id="close-cart">&times;</button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be displayed here -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: MWK <span id="cart-total">0</span></strong>
+                </div>
+                <button class="btn btn-primary" id="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15-Day Latest Posts Test - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .product-date {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        .product-status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .status-valid {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-expired {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 15-Day Latest Posts Test</h1>
+        
+        <div class="test-section">
+            <h3>Latest Posts Status</h3>
+            <div id="status" class="debug">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Actions</h3>
+            <button class="test-btn" onclick="checkLatestPosts()">🔍 Check Latest Posts</button>
+            <button class="test-btn" onclick="addTestProduct()">➕ Add Test Product</button>
+            <button class="test-btn" onclick="addOldProduct()">📅 Add Old Product (16 days ago)</button>
+            <button class="test-btn" onclick="simulateTimePass()">⏰ Simulate 16 Days Pass</button>
+            <button class="test-btn" onclick="clearLatestPosts()">🗑️ Clear Latest Posts</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Latest Products Display</h3>
+            <div id="products-display" class="product-list">No products to display</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToHome()">🏠 Home Page</button>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function checkLatestPosts() {
+            const status = document.getElementById('status');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            
+            const fifteenDaysAgo = new Date();
+            fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+            
+            let statusText = '📅 LATEST POSTS STATUS:\n\n';
+            statusText += `Total Latest Products: ${latestProducts.length}\n`;
+            statusText += `15-Day Window: ${fifteenDaysAgo.toLocaleDateString()}\n`;
+            statusText += `Current Date: ${new Date().toLocaleDateString()}\n\n`;
+            
+            const validProducts = [];
+            const expiredProducts = [];
+            
+            latestProducts.forEach((product, index) => {
+                const addedDate = new Date(product.addedToLatest || product.createdAt);
+                const isValid = addedDate > fifteenDaysAgo;
+                const daysOld = Math.floor((new Date() - addedDate) / (1000 * 60 * 60 * 24));
+                
+                statusText += `${index + 1}. ${product.name}\n`;
+                statusText += `   Added: ${addedDate.toLocaleDateString()}\n`;
+                statusText += `   Days Old: ${daysOld} days\n`;
+                statusText += `   Status: ${isValid ? '✅ Valid' : '❌ Expired'}\n\n`;
+                
+                if (isValid) {
+                    validProducts.push(product);
+                } else {
+                    expiredProducts.push(product);
+                }
+            });
+            
+            statusText += `Valid Products: ${validProducts.length}\n`;
+            statusText += `Expired Products: ${expiredProducts.length}\n`;
+            
+            status.textContent = statusText;
+            
+            // Update display
+            displayProducts(latestProducts, fifteenDaysAgo);
+        }
+        
+        function displayProducts(products, cutoffDate) {
+            const display = document.getElementById('products-display');
+            
+            if (products.length === 0) {
+                display.innerHTML = '<p>No products to display</p>';
+                return;
+            }
+            
+            display.innerHTML = products.map(product => {
+                const addedDate = new Date(product.addedToLatest || product.createdAt);
+                const isValid = addedDate > cutoffDate;
+                const daysOld = Math.floor((new Date() - addedDate) / (1000 * 60 * 60 * 24));
+                
+                return `
+                    <div class="product-card">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-date">Added: ${addedDate.toLocaleDateString()}</div>
+                        <div class="product-date">Days Old: ${daysOld} days</div>
+                        <span class="product-status ${isValid ? 'status-valid' : 'status-expired'}">
+                            ${isValid ? '✅ Valid' : '❌ Expired'}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function addTestProduct() {
+            const testProduct = {
+                id: 'test_' + Date.now(),
+                name: 'Test Product ' + Date.now(),
+                price: 5000,
+                category: 'clothing',
+                gender: 'male',
+                ageGroup: 'adults',
+                sizes: ['m', 'l', 'xl'],
+                description: 'Test product for 15-day latest posts',
+                image: 'https://via.placeholder.com/300x300?text=Test',
+                isNew: true,
+                createdAt: new Date().toISOString(),
+                addedToLatest: new Date().toISOString()
+            };
+            
+            // Add to latest products
+            let latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            latestProducts.unshift(testProduct);
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            alert('✅ Test product added to latest posts!');
+            checkLatestPosts();
+        }
+        
+        function addOldProduct() {
+            // Create product from 16 days ago
+            const sixteenDaysAgo = new Date();
+            sixteenDaysAgo.setDate(sixteenDaysAgo.getDate() - 16);
+            
+            const oldProduct = {
+                id: 'old_' + Date.now(),
+                name: 'Old Product (16 days ago)',
+                price: 3000,
+                category: 'accessories',
+                gender: 'female',
+                ageGroup: 'adults',
+                sizes: ['one-size'],
+                description: 'Old product to test expiration',
+                image: 'https://via.placeholder.com/300x300?text=Old',
+                isNew: false,
+                createdAt: sixteenDaysAgo.toISOString(),
+                addedToLatest: sixteenDaysAgo.toISOString()
+            };
+            
+            // Add to latest products
+            let latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            latestProducts.unshift(oldProduct);
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            alert('✅ Old product (16 days ago) added to latest posts!');
+            checkLatestPosts();
+        }
+        
+        function simulateTimePass() {
+            // Simulate time passing by updating all products to be older
+            let latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            
+            latestProducts.forEach(product => {
+                const addedDate = new Date(product.addedToLatest || product.createdAt);
+                addedDate.setDate(addedDate.getDate() - 16); // Make it 16 days older
+                product.addedToLatest = addedDate.toISOString();
+            });
+            
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            alert('⏰ Simulated 16 days passing! All products are now older.');
+            checkLatestPosts();
+        }
+        
+        function clearLatestPosts() {
+            if (confirm('⚠️ Clear all latest posts?')) {
+                localStorage.removeItem('latestProducts');
+                alert('✅ Latest posts cleared!');
+                checkLatestPosts();
+            }
+        }
+        
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLatestPosts();
+        });
+    </script>
+</body>
+</html>

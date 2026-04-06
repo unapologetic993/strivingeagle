@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unisex Product Test - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .product-gender {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .gender-male {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .gender-female {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .gender-unisex {
+            background: #d4edda;
+            color: #155724;
+        }
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👫 Unisex Product Test</h1>
+        
+        <div class="test-section">
+            <h3>Product Distribution Status</h3>
+            <div id="status" class="debug">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Actions</h3>
+            <button class="test-btn" onclick="checkProducts()">🔍 Check Products</button>
+            <button class="test-btn" onclick="addMaleProduct()">👨 Add Male Product</button>
+            <button class="test-btn" onclick="addFemaleProduct()">👩 Add Female Product</button>
+            <button class="test-btn" onclick="addUnisexProduct()">👫 Add Unisex Product</button>
+            <button class="test-btn" onclick="clearAllProducts()">🗑️ Clear All Products</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Male Section Products</h3>
+            <div id="male-products" class="product-grid">No products to display</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Female Section Products</h3>
+            <div id="female-products" class="product-grid">No products to display</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToMale()">👨 Go to Male Section</button>
+            <button class="test-btn" onclick="goToFemale()">👩 Go to Female Section</button>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Go to Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function checkProducts() {
+            const status = document.getElementById('status');
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            
+            let statusText = '👫 UNISEX PRODUCT STATUS:\n\n';
+            statusText += `Admin Products: ${adminProducts.length}\n`;
+            statusText += `Male Section Products: ${maleProducts.length}\n`;
+            statusText += `Female Section Products: ${femaleProducts.length}\n\n`;
+            
+            // Count by gender
+            const maleCount = adminProducts.filter(p => p.gender === 'male').length;
+            const femaleCount = adminProducts.filter(p => p.gender === 'female').length;
+            const unisexCount = adminProducts.filter(p => p.gender === 'unisex').length;
+            
+            statusText += `By Gender:\n`;
+            statusText += `Male Products: ${maleCount}\n`;
+            statusText += `Female Products: ${femaleCount}\n`;
+            statusText += `Unisex Products: ${unisexCount}\n\n`;
+            
+            statusText += `Expected Behavior:\n`;
+            statusText += `• Male products should appear in Male section\n`;
+            statusText += `• Female products should appear in Female section\n`;
+            statusText += `• Unisex products should appear in BOTH sections\n\n`;
+            
+            // Check unisex distribution
+            if (unisexCount > 0) {
+                const unisexProducts = adminProducts.filter(p => p.gender === 'unisex');
+                statusText += `Unisex Products Check:\n`;
+                unisexProducts.forEach((product, index) => {
+                    const inMale = maleProducts.some(p => p.id === product.id);
+                    const inFemale = femaleProducts.some(p => p.id === product.id);
+                    statusText += `  ${index + 1}. ${product.name}\n`;
+                    statusText += `     In Male: ${inMale ? '✅' : '❌'}\n`;
+                    statusText += `     In Female: ${inFemale ? '✅' : '❌'}\n`;
+                    statusText += `     Status: ${inMale && inFemale ? '✅ Correct' : '❌ Wrong'}\n\n`;
+                });
+            }
+            
+            status.textContent = statusText;
+            
+            // Update displays
+            displaySectionProducts();
+        }
+        
+        function displaySectionProducts() {
+            const maleDisplay = document.getElementById('male-products');
+            const femaleDisplay = document.getElementById('female-products');
+            
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            
+            // Display male section products
+            if (maleProducts.length === 0) {
+                maleDisplay.innerHTML = '<p>No products to display</p>';
+            } else {
+                maleDisplay.innerHTML = maleProducts.map(product => `
+                    <div class="product-card">
+                        <div class="product-name">${product.name}</div>
+                        <span class="product-gender gender-${product.gender}">${product.gender.toUpperCase()}</span>
+                        <div>Price: MWK ${product.price.toLocaleString()}</div>
+                        <div>Category: ${product.category}</div>
+                    </div>
+                `).join('');
+            }
+            
+            // Display female section products
+            if (femaleProducts.length === 0) {
+                femaleDisplay.innerHTML = '<p>No products to display</p>';
+            } else {
+                femaleDisplay.innerHTML = femaleProducts.map(product => `
+                    <div class="product-card">
+                        <div class="product-name">${product.name}</div>
+                        <span class="product-gender gender-${product.gender}">${product.gender.toUpperCase()}</span>
+                        <div>Price: MWK ${product.price.toLocaleString()}</div>
+                        <div>Category: ${product.category}</div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function addMaleProduct() {
+            const maleProduct = {
+                id: 'male_' + Date.now(),
+                name: 'Male Product ' + Date.now(),
+                price: 8000,
+                category: 'clothing',
+                gender: 'male',
+                ageGroup: 'adults',
+                sizes: ['m', 'l', 'xl'],
+                description: 'Male only product',
+                image: 'https://via.placeholder.com/300x300?text=Male',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(maleProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            // Add to male section
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            maleProducts.push(maleProduct);
+            localStorage.setItem('maleProducts', JSON.stringify(maleProducts));
+            
+            alert('✅ Male product added!');
+            checkProducts();
+        }
+        
+        function addFemaleProduct() {
+            const femaleProduct = {
+                id: 'female_' + Date.now(),
+                name: 'Female Product ' + Date.now(),
+                price: 6000,
+                category: 'accessories',
+                gender: 'female',
+                ageGroup: 'adults',
+                sizes: ['s', 'm', 'l'],
+                description: 'Female only product',
+                image: 'https://via.placeholder.com/300x300?text=Female',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(femaleProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            // Add to female section
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            femaleProducts.push(femaleProduct);
+            localStorage.setItem('femaleProducts', JSON.stringify(femaleProducts));
+            
+            alert('✅ Female product added!');
+            checkProducts();
+        }
+        
+        function addUnisexProduct() {
+            const unisexProduct = {
+                id: 'unisex_' + Date.now(),
+                name: 'Unisex Product ' + Date.now(),
+                price: 7000,
+                category: 'accessories',
+                gender: 'unisex',
+                ageGroup: 'adults',
+                sizes: ['s', 'm', 'l', 'xl'],
+                description: 'Unisex product for both genders',
+                image: 'https://via.placeholder.com/300x300?text=Unisex',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(unisexProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            // Add to BOTH male and female sections
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            maleProducts.push(unisexProduct);
+            localStorage.setItem('maleProducts', JSON.stringify(maleProducts));
+            
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            femaleProducts.push(unisexProduct);
+            localStorage.setItem('femaleProducts', JSON.stringify(femaleProducts));
+            
+            alert('✅ Unisex product added to both sections!');
+            checkProducts();
+        }
+        
+        function clearAllProducts() {
+            if (confirm('⚠️ Clear all products from all sections?')) {
+                localStorage.removeItem('adminProducts');
+                localStorage.removeItem('maleProducts');
+                localStorage.removeItem('femaleProducts');
+                localStorage.removeItem('latestProducts');
+                localStorage.removeItem('featuredProducts');
+                
+                alert('✅ All products cleared!');
+                checkProducts();
+            }
+        }
+        
+        function goToMale() {
+            window.location.href = 'male.html';
+        }
+        
+        function goToFemale() {
+            window.location.href = 'female.html';
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkProducts();
+        });
+    </script>
+</body>
+</html>

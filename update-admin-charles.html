@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Admin Username to Charles - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        .update-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .update-btn:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        h1 { color: #007bff; margin-bottom: 30px; }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .credentials {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👤 Update Admin Username to Charles</h1>
+        
+        <div class="credentials">
+            <h3>📧 New Admin Credentials:</h3>
+            <p><strong>Username:</strong> [Hidden for security]</p>
+            <p><strong>Password:</strong> [Hidden for security]</p>
+            <p><strong>Role:</strong> admin</p>
+        </div>
+        
+        <button onclick="updateAdminUsername()" class="update-btn">
+            👤 Update Admin Username to "Charles"
+        </button>
+        
+        <div id="result" style="margin-top: 30px;"></div>
+    </div>
+
+    <script>
+        function updateAdminUsername() {
+            if (confirm('Update admin username to "Charles"?')) {
+                // Get current users
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                
+                // Remove any existing admin accounts
+                const filteredUsers = users.filter(u => u.role !== 'admin');
+                
+                // Create new admin account with username "Charles"
+                const adminUser = {
+                    id: 'admin_001',
+                    name: 'Admin User',
+                    email: 'Charles',
+                    password: 'hashed_password_placeholder', // Will be set by auth.js
+                    role: 'admin',
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Add new admin account
+                filteredUsers.push(adminUser);
+                
+                // Save to localStorage
+                localStorage.setItem('users', JSON.stringify(filteredUsers));
+                
+                // Clear session
+                localStorage.removeItem('userSession');
+                localStorage.removeItem('verificationCode');
+                
+                showResult('Admin username updated to "Charles" successfully!', 'success');
+            }
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = `
+                <div class="status ${type}">
+                    ${type === 'success' ? '✅' : '❌'} ${message}
+                </div>
+                <div style="margin-top: 20px;">
+                    <button onclick="goToLogin()" class="update-btn" style="background: #28a745; font-size: 16px;">
+                        🔐 Go to Login Page
+                    </button>
+                </div>
+            `;
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        // Auto-run on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const adminAccounts = users.filter(u => u.role === 'admin');
+            
+            const resultDiv = document.getElementById('result');
+            if (adminAccounts.length > 0) {
+                resultDiv.innerHTML = `
+                    <div class="status warning">
+                        Found ${adminAccounts.length} admin account(s)<br>
+                        Current admin username: ${adminAccounts[0].email}
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="status warning">
+                        No admin accounts found
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

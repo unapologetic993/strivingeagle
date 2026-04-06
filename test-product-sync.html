@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Product Sync - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Product Sync</h1>
+        
+        <div class="test-section">
+            <h3>Current Product Status</h3>
+            <div id="status" class="debug">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Actions</h3>
+            <button class="test-btn" onclick="checkProducts()">Check Products</button>
+            <button class="test-btn" onclick="checkSync()">Check Sync Status</button>
+            <button class="test-btn" onclick="addTestProduct()">Add Test Product</button>
+            <button class="test-btn" onclick="clearAll()">Clear All Products</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToHome()">🏠 Home Page</button>
+            <button class="test-btn" onclick="goToMale()">👨 Male Section</button>
+            <button class="test-btn" onclick="goToFemale()">👩 Female Section</button>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function checkProducts() {
+            const status = document.getElementById('status');
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            const chromeProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            
+            let statusText = '🔍 PRODUCT STATUS:\n\n';
+            statusText += `Admin Products: ${adminProducts.length} items\n`;
+            statusText += `Male Products: ${maleProducts.length} items\n`;
+            statusText += `Female Products: ${femaleProducts.length} items\n`;
+            statusText += `Latest Products: ${latestProducts.length} items\n`;
+            statusText += `Chrome Admin Products: ${chromeProducts.length} items\n`;
+            
+            if (adminProducts.length > 0) {
+                statusText += '\n✅ Admin Products:\n';
+                adminProducts.forEach((product, index) => {
+                    statusText += `  ${index + 1}. ${product.name} (${product.gender})\n`;
+                });
+            }
+            
+            status.textContent = statusText;
+        }
+        
+        function checkSync() {
+            const status = document.getElementById('status');
+            const productsCleared = localStorage.getItem('productsCleared');
+            const emptyOverride = localStorage.getItem('emptyProductsOverride');
+            
+            let syncStatus = '🔄 SYNC STATUS:\n\n';
+            syncStatus += `Products Cleared: ${productsCleared === 'true' ? 'Yes' : 'No'}\n`;
+            syncStatus += `Empty Override: ${emptyOverride ? 'Yes' : 'No'}\n`;
+            syncStatus += `Script.js Clean: ${document.querySelector('script[src*="script.js"]') ? 'Yes' : 'No'}\n`;
+            
+            status.textContent = syncStatus;
+        }
+        
+        function addTestProduct() {
+            const testProduct = {
+                id: 'test_' + Date.now(),
+                name: 'Test Product ' + Date.now(),
+                price: 5000,
+                category: 'clothing',
+                gender: 'male',
+                ageGroup: 'adults',
+                sizes: ['m', 'l', 'xl'],
+                description: 'Test product for sync verification',
+                image: 'https://via.placeholder.com/300x300?text=Test',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add to all storage locations
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(testProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            maleProducts.push(testProduct);
+            localStorage.setItem('maleProducts', JSON.stringify(maleProducts));
+            
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            latestProducts.unshift(testProduct);
+            if (latestProducts.length > 8) {
+                latestProducts = latestProducts.slice(0, 8);
+            }
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            alert('✅ Test product added to all storage locations!');
+            checkProducts();
+        }
+        
+        function clearAll() {
+            if (confirm('⚠️ Clear ALL products from entire system?')) {
+                localStorage.clear();
+                alert('✅ All products cleared!');
+                checkProducts();
+            }
+        }
+        
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+        
+        function goToMale() {
+            window.location.href = 'male.html';
+        }
+        
+        function goToFemale() {
+            window.location.href = 'female.html';
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkProducts();
+        });
+    </script>
+</body>
+</html>

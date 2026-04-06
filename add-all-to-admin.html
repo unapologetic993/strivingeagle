@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add All Products to Admin Dashboard</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        .btn.danger {
+            background: #dc3545;
+        }
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        .btn.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .btn.warning:hover {
+            background: #e0a800;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+        .status-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .success-box {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .warning-box {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+        .product-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .add-btn {
+            background: #28a745;
+            color: white;
+        }
+        .add-btn:hover {
+            background: #218838;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>➕ Add All Products to Admin Dashboard</h1>
+        
+        <div id="status-message" class="status-box warning-box">
+            <h3>🔍 Finding All Products</h3>
+            <p>This tool will find all products and add them to your admin dashboard for easy management.</p>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 Quick Actions</h3>
+            <button class="btn" onclick="scanAndAddAll()">🔍 Scan & Add All to Admin</button>
+            <button class="btn danger" onclick="deleteAllProducts()">🗑️ Delete All Products</button>
+            <button class="btn warning" onclick="resetAdmin()">🔄 Reset Admin Dashboard</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Current Status</h3>
+            <div id="status" class="debug">Loading status...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📦 Products Found</h3>
+            <div id="products-grid" class="product-grid"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 Go to Admin</h3>
+            <button class="btn" onclick="goToChromeAdmin()">🔧 Go to Chrome Admin Dashboard</button>
+        </div>
+    </div>
+
+    <script>
+        let allProducts = [];
+        let chromeAdminProducts = [];
+        
+        function updateStatus(message, type = 'success') {
+            const statusBox = document.getElementById('status-message');
+            statusBox.className = `status-box ${type}-box`;
+            statusBox.innerHTML = `<h3>${message}</h3>`;
+        }
+        
+        function scanAndAddAll() {
+            console.log('🔍 Scanning all products and adding to admin...');
+            
+            // Get products from all storage locations
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            const featuredProducts = JSON.parse(localStorage.getItem('featuredProducts') || '[]');
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            chromeAdminProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            
+            // Combine all products
+            allProducts = [
+                ...adminProducts,
+                ...latestProducts,
+                ...featuredProducts,
+                ...maleProducts,
+                ...femaleProducts
+            ];
+            
+            // Remove duplicates by ID
+            const uniqueProducts = [];
+            const seenIds = new Set();
+            
+            allProducts.forEach(product => {
+                if (!seenIds.has(product.id)) {
+                    seenIds.add(product.id);
+                    uniqueProducts.push(product);
+                }
+            });
+            
+            allProducts = uniqueProducts;
+            
+            // Add ALL products to Chrome admin
+            localStorage.setItem('chromeAdminProducts', JSON.stringify(allProducts));
+            chromeAdminProducts = [...allProducts];
+            
+            // Also ensure they're in main admin storage
+            localStorage.setItem('adminProducts', JSON.stringify(allProducts));
+            
+            const statusDiv = document.getElementById('status');
+            let statusText = '🔍 SCAN & ADD COMPLETE:\n\n';
+            statusText += `Products Found: ${allProducts.length}\n`;
+            statusText += `Added to Admin: ${allProducts.length}\n`;
+            statusText += `Previous Admin Products: ${chromeAdminProducts.length - allProducts.length}\n\n`;
+            
+            statusText += '📦 PRODUCT BREAKDOWN:\n';
+            const maleCount = allProducts.filter(p => p.gender === 'male').length;
+            const femaleCount = allProducts.filter(p => p.gender === 'female').length;
+            const unisexCount = allProducts.filter(p => p.gender === 'unisex').length;
+            
+            statusText += `Male Products: ${maleCount}\n`;
+            statusText += `Female Products: ${femaleCount}\n`;
+            statusText += `Unisex Products: ${unisexCount}\n\n`;
+            
+            statusText += '✅ ALL PRODUCTS ADDED TO ADMIN DASHBOARD!\n';
+            statusText += '🚀 You can now manage all products from admin!';
+            
+            statusDiv.textContent = statusText;
+            displayProducts();
+            updateStatus('✅ All Products Added to Admin Dashboard', 'success');
+            
+            alert(`✅ Added ${allProducts.length} products to admin dashboard!\n\nYou can now manage all products from the Chrome Admin.`);
+        }
+        
+        function deleteAllProducts() {
+            if (!confirm('🗑️ DELETE ALL PRODUCTS?\n\nThis will permanently delete ALL products from:\n- Chrome Admin\n- Main Admin Storage\n- Latest Products\n- Featured Products\n- Gender Storage\n\nThis CANNOT be undone!')) {
+                return;
+            }
+            
+            // Clear ALL product storage
+            localStorage.setItem('chromeAdminProducts', JSON.stringify([]));
+            localStorage.setItem('adminProducts', JSON.stringify([]));
+            localStorage.setItem('latestProducts', JSON.stringify([]));
+            localStorage.setItem('featuredProducts', JSON.stringify([]));
+            localStorage.removeItem('maleProducts');
+            localStorage.removeItem('femaleProducts');
+            
+            allProducts = [];
+            chromeAdminProducts = [];
+            
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = '🗑️ ALL PRODUCTS DELETED!\n\n✅ All storage locations cleared.\n✅ System reset complete.';
+            
+            displayProducts();
+            updateStatus('🗑️ All Products Deleted', 'warning');
+            
+            alert('✅ All products deleted successfully!');
+        }
+        
+        function resetAdmin() {
+            if (!confirm('🔄 RESET ADMIN DASHBOARD?\n\nThis will:\n1. Clear Chrome Admin\n2. Add all products from storage\n3. Sync everything properly\n\nThis will fix admin dashboard issues.')) {
+                return;
+            }
+            
+            // Clear Chrome admin
+            localStorage.setItem('chromeAdminProducts', JSON.stringify([]));
+            
+            // Get all products from storage
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            const featuredProducts = JSON.parse(localStorage.getItem('featuredProducts') || '[]');
+            
+            // Combine and add to admin
+            const allProducts = [...adminProducts, ...latestProducts, ...featuredProducts];
+            const uniqueProducts = [];
+            const seenIds = new Set();
+            
+            allProducts.forEach(product => {
+                if (!seenIds.has(product.id)) {
+                    seenIds.add(product.id);
+                    uniqueProducts.push(product);
+                }
+            });
+            
+            localStorage.setItem('chromeAdminProducts', JSON.stringify(uniqueProducts));
+            chromeAdminProducts = [...uniqueProducts];
+            
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = `🔄 ADMIN RESET COMPLETE!\n\n✅ Chrome Admin cleared\n✅ ${uniqueProducts.length} products added\n✅ Admin dashboard ready!\n\n🚀 Go to Chrome Admin to manage products.`;
+            
+            displayProducts();
+            updateStatus('✅ Admin Dashboard Reset Complete', 'success');
+            
+            alert(`✅ Admin dashboard reset complete!\n\nAdded ${uniqueProducts.length} products to admin dashboard.`);
+        }
+        
+        function displayProducts() {
+            const gridDiv = document.getElementById('products-grid');
+            
+            if (allProducts.length === 0) {
+                gridDiv.innerHTML = '<p>No products found. All products have been deleted.</p>';
+                return;
+            }
+            
+            gridDiv.innerHTML = allProducts.map(product => `
+                <div class="product-card">
+                    <img src="${product.image || 'https://via.placeholder.com/300x200?text=No+Image'}" 
+                         alt="${product.name}" 
+                         class="product-image"
+                         onerror="this.src='https://via.placeholder.com/300x200?text=Error'">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-meta">
+                        MWK ${product.price.toLocaleString()}<br>
+                        ${product.gender} | ${product.category}<br>
+                        ${product.ageGroup}
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-btn add-btn" onclick="addToAdmin('${product.id}')">
+                            ✅ In Admin
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteProduct('${product.id}')">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function addToAdmin(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Check if already in admin
+            if (chromeAdminProducts.some(p => p.id === productId)) {
+                alert('✅ Product is already in admin dashboard!');
+                return;
+            }
+            
+            // Add to Chrome admin
+            chromeAdminProducts.push(product);
+            localStorage.setItem('chromeAdminProducts', JSON.stringify(chromeAdminProducts));
+            
+            alert(`✅ "${product.name}" added to admin dashboard!`);
+            displayProducts();
+        }
+        
+        function deleteProduct(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            
+            if (!confirm(`🗑️ Delete "${product.name}"?\n\nThis will remove the product from ALL storage locations.`)) {
+                return;
+            }
+            
+            // Delete from ALL storage locations
+            let storageKeys = ['adminProducts', 'latestProducts', 'featuredProducts', 'maleProducts', 'femaleProducts'];
+            
+            storageKeys.forEach(key => {
+                let products = JSON.parse(localStorage.getItem(key) || '[]');
+                products = products.filter(p => p.id !== productId);
+                localStorage.setItem(key, JSON.stringify(products));
+            });
+            
+            // Remove from Chrome admin
+            chromeAdminProducts = chromeAdminProducts.filter(p => p.id !== productId);
+            localStorage.setItem('chromeAdminProducts', JSON.stringify(chromeAdminProducts));
+            
+            // Remove from allProducts array
+            allProducts = allProducts.filter(p => p.id !== productId);
+            
+            alert(`🗑️ "${product.name}" deleted from all storage!`);
+            displayProducts();
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-scan on load
+        document.addEventListener('DOMContentLoaded', function() {
+            scanAndAddAll();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Striving Eagle</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .admin-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        
+        .admin-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .admin-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header h2 {
+            margin: 0;
+            color: var(--text-color);
+        }
+        
+        .btn-add {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .products-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .product-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .product-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 1.5rem;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .product-meta {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-admin {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-admin:hover {
+            background: var(--secondary-color);
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .edit-mode {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+        
+        .orders-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .order-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .order-id {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .order-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1><i class="fas fa-eagle"></i> Striving Eagle Admin</h1>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <button class="btn-admin" onclick="viewStore()">
+                    <i class="fas fa-store"></i> View Store
+                </button>
+                <button class="btn-admin btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+            <p id="admin-name">Welcome, Admin</p>
+        </div>
+
+        <!-- Admin Grid -->
+        <div class="admin-grid">
+            <!-- Products Section -->
+            <div class="admin-section" id="products-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-box"></i> Products Management</h2>
+                    <button class="btn-add" onclick="showAddProductForm()">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+
+                <!-- Add Product Form -->
+                <div id="add-product-form" style="display: none;">
+                    <h3>Add New Product</h3>
+                    <form id="product-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-name">Product Name *</label>
+                                <input type="text" id="product-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-price">Price (MWK) *</label>
+                                <input type="number" id="product-price" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-category">Category *</label>
+                                <select id="product-category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="glasses">Glasses</option>
+                                    <option value="earrings">Earrings</option>
+                                    <option value="socks">Socks</option>
+                                    <option value="hats">Hats</option>
+                                    <option value="beanies">Beanies</option>
+                                    <option value="jeans">Jeans</option>
+                                    <option value="sweatpants">Sweatpants</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-gender">Gender *</label>
+                                <select id="product-gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="unisex">Unisex</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="product-age">Age Group *</label>
+                                <select id="product-age" required>
+                                    <option value="">Select Age Group</option>
+                                    <option value="kids">Kids</option>
+                                    <option value="teens">Teens</option>
+                                    <option value="adults">Adults</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-sizes">Sizes (comma-separated)</label>
+                                <input type="text" id="product-sizes" placeholder="e.g., s, m, l, xl">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-description">Description *</label>
+                            <textarea id="product-description" rows="4" required placeholder="Describe your product..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn-add">
+                                <i class="fas fa-save"></i> Save Product
+                            </button>
+                            <button type="button" class="btn-admin" onclick="cancelEdit()">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Products List -->
+                <div id="products-list-section">
+                    <h3>Current Products</h3>
+                    <div class="products-list" id="products-list">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Section -->
+            <div class="admin-section" id="orders-section" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-shopping-cart"></i> Customer Orders</h2>
+                </div>
+                <div class="orders-list" id="orders-list">
+                    <!-- Orders will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inline JavaScript for Chrome Compatibility -->
+    <script>
+        // Admin Dashboard JavaScript - Chrome Compatible
+        let products = [];
+        let orders = [];
+        let editingProduct = null;
+
+        // Initialize admin dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin dashboard loading...');
+            
+            // Check if user is logged in (simple check)
+            const session = localStorage.getItem('userSession');
+            if (!session) {
+                alert('Please login first');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            console.log('Access granted - loading dashboard...');
+            
+            // Update admin name
+            const adminName = document.getElementById('admin-name');
+            if (adminName && session) {
+                const sessionData = JSON.parse(session);
+                adminName.textContent = 'Welcome, ' + (sessionData.user?.name || 'Admin');
+            }
+            
+            loadProducts();
+            loadOrders();
+            initializeEventListeners();
+        });
+
+        // Load products from localStorage
+        function loadProducts() {
+            try {
+                const savedProducts = localStorage.getItem('adminProducts');
+                if (savedProducts) {
+                    products = JSON.parse(savedProducts);
+                    console.log('Loaded products from localStorage:', products.length, 'products');
+                } else {
+                    products = [];
+                    console.log('No products found in localStorage');
+                }
+                displayProducts();
+            } catch (error) {
+                console.error('Error loading products:', error);
+                products = [];
+            }
+        }
+
+        // Display products
+        function displayProducts() {
+            const productsList = document.getElementById('products-list');
+            if (!productsList) {
+                console.error('Products list element not found');
+                return;
+            }
+            
+            if (products.length === 0) {
+                productsList.innerHTML = '<p>No products added yet.</p>';
+                console.log('No products to display');
+                return;
+            }
+            
+            productsList.innerHTML = products.map(product => {
+                let imageSrc = product.image || 'https://via.placeholder.com/80x80?text=No+Image';
+                
+                return `
+                    <div class="product-item">
+                        <img src="${imageSrc}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'">
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-meta">
+                                ${product.category} | ${product.gender} | ${product.ageGroup}
+                                ${product.isNew ? '| <span style="color: var(--secondary-color);">NEW</span>' : ''}
+                            </div>
+                            <div class="product-price">MWK ${product.price.toLocaleString()}</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-admin" onclick="startEditProduct('${product.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-admin btn-danger" onclick="deleteProduct('${product.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            console.log('Successfully displayed', products.length, 'products');
+        }
+
+        // Delete product
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                products = products.filter(p => p.id !== productId);
+                saveProducts();
+            }
+        }
+
+        // Save products to localStorage
+        function saveProducts() {
+            localStorage.setItem('adminProducts', JSON.stringify(products));
+            displayProducts();
+        }
+
+        // Load orders
+        function loadOrders() {
+            try {
+                const savedOrders = localStorage.getItem('customerOrders');
+                if (savedOrders) {
+                    orders = JSON.parse(savedOrders);
+                    console.log('Loaded orders from localStorage:', orders.length, 'orders');
+                } else {
+                    orders = [];
+                    console.log('No orders found in localStorage');
+                }
+                displayOrders();
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                orders = [];
+            }
+        }
+
+        // Display orders
+        function displayOrders() {
+            const ordersList = document.getElementById('orders-list');
+            if (!ordersList) return;
+            
+            if (orders.length === 0) {
+                ordersList.innerHTML = '<p>No customer orders yet.</p>';
+                return;
+            }
+            
+            ordersList.innerHTML = orders.map(order => `
+                <div class="order-item">
+                    <div class="order-header">
+                        <span class="order-id">#${order.orderId}</span>
+                        <span class="order-status status-${order.status}">${order.status}</span>
+                    </div>
+                    <div><strong>${order.name}</strong></div>
+                    <div>Amount: MWK ${order.total?.toLocaleString() || '0'}</div>
+                    <div>Date: ${new Date(order.timestamp).toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+
+        // Show add product form
+        function showAddProductForm() {
+            document.getElementById('add-product-form').style.display = 'block';
+            document.getElementById('products-list-section').style.display = 'none';
+        }
+
+        // Initialize event listeners
+        function initializeEventListeners() {
+            // Product form submission
+            const productForm = document.getElementById('product-form');
+            if (productForm) {
+                productForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(productForm);
+                    const product = {
+                        id: editingProduct ? editingProduct.id : 'prod_' + Date.now(),
+                        name: formData.get('product-name'),
+                        price: parseFloat(formData.get('product-price')),
+                        category: formData.get('product-category'),
+                        gender: formData.get('product-gender'),
+                        ageGroup: formData.get('product-age'),
+                        sizes: formData.get('product-sizes').split(',').map(s => s.trim()),
+                        description: formData.get('product-description'),
+                        isNew: !editingProduct,
+                        createdAt: editingProduct ? editingProduct.createdAt : new Date().toISOString()
+                    };
+                    
+                    if (editingProduct) {
+                        // Update existing product
+                        const index = products.findIndex(p => p.id === editingProduct.id);
+                        if (index !== -1) {
+                            products[index] = product;
+                        }
+                        editingProduct = null;
+                    } else {
+                        // Add new product
+                        products.push(product);
+                    }
+                    
+                    saveProducts();
+                    productForm.reset();
+                    showAddProductForm();
+                });
+            }
+        }
+
+        // View store
+        function viewStore() {
+            window.open('../index.html', '_blank');
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userSession');
+                window.location.href = '../index.html';
+            }
+        }
+
+        // Edit product functions (simplified)
+        function startEditProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                editingProduct = product;
+                // Fill form with product data
+                document.getElementById('product-name').value = product.name;
+                document.getElementById('product-price').value = product.price;
+                document.getElementById('product-category').value = product.category;
+                document.getElementById('product-gender').value = product.gender;
+                document.getElementById('product-age').value = product.ageGroup;
+                document.getElementById('product-sizes').value = product.sizes.join(', ');
+                document.getElementById('product-description').value = product.description;
+                
+                showAddProductForm();
+            }
+        }
+
+        function cancelEdit() {
+            editingProduct = null;
+            document.getElementById('product-form').reset();
+            showAddProductForm();
+        }
+    </script>
+</body>
+</html>

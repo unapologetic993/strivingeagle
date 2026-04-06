@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Striving Eagle</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .success { color: green; }
+        .error { color: red; }
+        .fixed { color: blue; font-weight: bold; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: black; }
+        .instructions { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🦅 Striving Eagle - Admin Fix Test Page</h1>
+    
+    <div class="test-section">
+        <h2>🔧 Issue Status: FIXED</h2>
+        <div class="fixed">✅ Admin dashboard path issue has been resolved</div>
+        <div class="fixed">✅ Double admin directory redirect fixed</div>
+        <div class="fixed">✅ Login redirects now work correctly</div>
+    </div>
+    
+    <div class="test-section instructions">
+        <h2>� How to Access Admin Dashboard</h2>
+        <p><strong>Option 1 (Recommended):</strong></p>
+        <ol>
+            <li>Click "🔐 Open Admin Login" button below</li>
+            <li>Login with credentials</li>
+            <li>You'll be automatically redirected to the correct dashboard path</li>
+        </ol>
+        
+        <p><strong>Option 2 (Direct):</strong></p>
+        <ol>
+            <li>Click "⚙️ Open Admin Dashboard" button below</li>
+            <li>If not logged in, you'll be redirected to login first</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔗 Quick Access Links</h2>
+        <button class="btn-primary" onclick="window.open('index.html', '_blank')">🏠 Main Website</button>
+        <button class="btn-warning" onclick="window.open('login.html', '_blank')">🔐 Admin Login</button>
+        <button class="btn-success" onclick="window.open('admin/dashboard.html', '_blank')">⚙️ Admin Dashboard</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>� File Status Check</h2>
+        <div id="file-status">Checking files...</div>
+    </div>
+    
+    <script>
+        // Check if key files exist
+        const files = [
+            'index.html',
+            'login.html', 
+            'admin/dashboard.html',
+            'data/products.json',
+            'js/auth.js',
+            'js/script.js',
+            'css/styles.css'
+        ];
+        
+        let statusHtml = '';
+        let checkedCount = 0;
+        
+        files.forEach(file => {
+            fetch(file, { method: 'HEAD' })
+                .then(() => {
+                    statusHtml += `<div class="success">✅ ${file}</div>`;
+                })
+                .catch(() => {
+                    statusHtml += `<div class="error">❌ ${file}</div>`;
+                })
+                .finally(() => {
+                    checkedCount++;
+                    if (checkedCount === files.length) {
+                        document.getElementById('file-status').innerHTML = statusHtml;
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

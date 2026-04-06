@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Admin Fix - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 700px;
+            width: 90%;
+        }
+        .fix-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+        }
+        .fix-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(220, 53, 69, 0.3);
+        }
+        .success-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        .success-btn:hover {
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+        h1 { 
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: left;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .step {
+            background: #e8f5e8;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+            text-align: left;
+        }
+        .step-number {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Direct Admin Fix</h1>
+        
+        <div id="status" class="status info">
+            Ready to fix main admin login issue...
+        </div>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Complete Reset:</strong> Clear all data and create fresh admin
+        </div>
+        
+        <button onclick="completeReset()" class="fix-btn success-btn">
+            🔄 COMPLETE RESET
+        </button>
+        
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Verify Charles User:</strong> Check if admin was created
+        </div>
+        
+        <button onclick="verifyCharles()" class="fix-btn">
+            🔍 VERIFY CHARLES USER
+        </button>
+        
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Test Login:</strong> Try main admin login
+        </div>
+        
+        <button onclick="testLogin()" class="fix-btn">
+            🔐 TEST MAIN LOGIN
+        </button>
+        
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Go to Login:</strong> Access main login page
+        </div>
+        
+        <button onclick="goToLogin()" class="fix-btn">
+            🚪 GO TO MAIN LOGIN
+        </button>
+        
+        <div id="debug" class="debug">
+            Loading debug info...
+        </div>
+    </div>
+
+    <script>
+        // Direct fix without auth.js dependency
+        function completeReset() {
+            console.log('🔄 Starting complete reset...');
+            
+            try {
+                // Clear everything
+                localStorage.clear();
+                
+                // Create Charles admin user with proper structure
+                const adminUser = {
+                    id: 'admin_001',
+                    name: 'Charles Admin',
+                    email: 'Charles',
+                    password: 'ChisomoXCharles08', // Plain text for now
+                    role: 'admin',
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Save to users array
+                const users = [adminUser];
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Create session
+                const session = {
+                    user: adminUser,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('userSession', JSON.stringify(session));
+                
+                showStatus('✅ Complete reset done! Charles admin created with plain text password', 'success');
+                updateDebug();
+                
+            } catch (error) {
+                console.error('❌ Error in complete reset:', error);
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+        
+        function verifyCharles() {
+            console.log('🔍 Verifying Charles user...');
+            
+            try {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const charles = users.find(u => u.email === 'Charles' && u.role === 'admin');
+                
+                if (charles) {
+                    showStatus('✅ Charles user found! Name: ' + charles.name + ', Role: ' + charles.role, 'success');
+                } else {
+                    showStatus('❌ Charles user not found. Try Complete Reset first.', 'error');
+                }
+                
+                updateDebug();
+                
+            } catch (error) {
+                console.error('❌ Error verifying Charles:', error);
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+        
+        function testLogin() {
+            console.log('🔐 Testing main login...');
+            
+            try {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const charles = users.find(u => u.email === 'Charles' && u.role === 'admin');
+                
+                if (charles && charles.password === 'ChisomoXCharles08') {
+                    // Create session
+                    const session = {
+                        user: charles,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('userSession', JSON.stringify(session));
+                    
+                    showStatus('✅ Main login successful! Charles authenticated.', 'success');
+                    updateDebug();
+                } else {
+                    showStatus('❌ Login failed. Charles user not found or wrong password.', 'error');
+                }
+                
+                updateDebug();
+                
+            } catch (error) {
+                console.error('❌ Error testing login:', error);
+                showStatus('❌ Error: ' + error.message, 'error');
+            }
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = message;
+        }
+        
+        function updateDebug() {
+            const debugDiv = document.getElementById('debug');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const session = localStorage.getItem('userSession');
+            
+            let debugInfo = '🔍 DEBUG INFO:\n\n';
+            debugInfo += `Users in localStorage: ${users.length}\n`;
+            
+            if (users.length > 0) {
+                users.forEach((user, index) => {
+                    debugInfo += `\nUser ${index + 1}:\n`;
+                    debugInfo += `  ID: ${user.id}\n`;
+                    debugInfo += `  Name: ${user.name}\n`;
+                    debugInfo += `  Email/Username: ${user.email}\n`;
+                    debugInfo += `  Role: ${user.role}\n`;
+                    debugInfo += `  Password: ${user.password}\n`;
+                    debugInfo += `  Password type: ${typeof user.password}\n`;
+                    debugInfo += `  Password length: ${user.password.length}\n`;
+                });
+            }
+            
+            debugInfo += `\nSession exists: ${session ? 'Yes' : 'No'}\n`;
+            
+            if (session) {
+                const sessionData = JSON.parse(session);
+                debugInfo += `Session user: ${sessionData.user?.email || 'None'}\n`;
+                debugInfo += `Session role: ${sessionData.user?.role || 'None'}\n`;
+            }
+            
+            debugDiv.textContent = debugInfo;
+        }
+        
+        // Auto-check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDebug();
+        });
+    </script>
+</body>
+</html>

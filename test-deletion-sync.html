@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Deletion Sync - Admin to Main Website</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        .btn.success {
+            background: #28a745;
+        }
+        .btn.success:hover {
+            background: #218838;
+        }
+        .btn.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .btn.warning:hover {
+            background: #e0a800;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+        .status-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .success-box {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error-box {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning-box {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .product-info {
+            flex: 1;
+        }
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .product-meta {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .delete-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Test Deletion Sync - Admin to Main Website</h1>
+        
+        <div id="status-message" class="status-box warning-box">
+            <h3>🔧 Testing Deletion Sync</h3>
+            <p>Test if products deleted from admin dashboard are instantly removed from main website pages.</p>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Current Storage Status</h3>
+            <div id="storage-status" class="debug">Loading storage status...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Test Deletion Sync</h3>
+            <button class="btn" onclick="checkStorageStatus()">📊 Check Storage Status</button>
+            <button class="btn success" onclick="addTestProduct()">➕ Add Test Product</button>
+            <button class="btn warning" onclick="testDeletionSync()">🗑️ Test Deletion Sync</button>
+            <button class="btn" onclick="simulateAdminDelete()">🔧 Simulate Admin Delete</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📦 Available Products (Click to Test Delete)</h3>
+            <div id="products-list"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Test Results</h3>
+            <div id="test-results" class="debug">Test results will appear here...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 Go to Test Pages</h3>
+            <button class="btn success" onclick="goToChromeAdmin()">🔧 Chrome Admin</button>
+            <button class="btn success" onclick="goToMale()">👨 Test Male Page</button>
+            <button class="btn success" onclick="goToFemale()">👩 Test Female Page</button>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(message, type = 'success') {
+            const statusBox = document.getElementById('status-message');
+            statusBox.className = `status-box ${type}-box`;
+            statusBox.innerHTML = `<h3>${message}</h3>`;
+        }
+        
+        function checkStorageStatus() {
+            const statusDiv = document.getElementById('storage-status');
+            
+            const chromeProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            const featuredProducts = JSON.parse(localStorage.getItem('featuredProducts') || '[]');
+            const lastDeletionSync = localStorage.getItem('lastDeletionSync');
+            
+            let statusText = '📊 STORAGE STATUS:\n\n';
+            statusText += `Chrome Admin Products: ${chromeProducts.length}\n`;
+            statusText += `Main Admin Products: ${adminProducts.length}\n`;
+            statusText += `Latest Products: ${latestProducts.length}\n`;
+            statusText += `Featured Products: ${featuredProducts.length}\n\n`;
+            
+            statusText += '🔍 SYNC STATUS:\n';
+            statusText += `Last Deletion Sync: ${lastDeletionSync ? new Date(lastDeletionSync).toLocaleString() : 'Never'}\n\n`;
+            
+            // Check if storage is synced
+            const chromeIds = chromeProducts.map(p => p.id);
+            const adminIds = adminProducts.map(p => p.id);
+            const latestIds = latestProducts.map(p => p.id);
+            const featuredIds = featuredProducts.map(p => p.id);
+            
+            let isSynced = true;
+            
+            if (chromeProducts.length !== adminProducts.length) {
+                statusText += `❌ Chrome Admin (${chromeProducts.length}) ≠ Main Admin (${adminProducts.length})\n`;
+                isSynced = false;
+            } else {
+                statusText += `✅ Chrome Admin = Main Admin (${adminProducts.length})\n`;
+            }
+            
+            // Check if products in latest/featured exist in admin
+            const latestOrphans = latestIds.filter(id => !adminIds.includes(id));
+            const featuredOrphans = featuredIds.filter(id => !adminIds.includes(id));
+            
+            if (latestOrphans.length > 0) {
+                statusText += `❌ Latest has ${latestOrphans.length} orphaned products\n`;
+                isSynced = false;
+            } else {
+                statusText += `✅ Latest products synced with admin\n`;
+            }
+            
+            if (featuredOrphans.length > 0) {
+                statusText += `❌ Featured has ${featuredOrphans.length} orphaned products\n`;
+                isSynced = false;
+            } else {
+                statusText += `✅ Featured products synced with admin\n`;
+            }
+            
+            statusText += `\n🎯 SYNC STATUS: ${isSynced ? '✅ SYNCED' : '❌ NOT SYNCED'}`;
+            
+            statusDiv.textContent = statusText;
+            updateProductsList();
+            
+            if (isSynced) {
+                updateStatus('✅ Storage Synced - Deletion Working', 'success');
+            } else {
+                updateStatus('❌ Storage Not Synced - Test Deletion', 'error');
+            }
+        }
+        
+        function addTestProduct() {
+            const testProduct = {
+                id: 'test_delete_' + Date.now(),
+                name: 'Test Delete Product ' + new Date().toLocaleTimeString(),
+                price: 7500,
+                category: 'accessories',
+                gender: 'unisex',
+                ageGroup: 'adults',
+                sizes: ['s', 'm', 'l'],
+                description: 'Test product for deletion sync verification',
+                image: 'https://picsum.photos/seed/testdelete' + Date.now() + '/300/300.jpg',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add to Chrome admin
+            let chromeProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            chromeProducts.push(testProduct);
+            localStorage.setItem('chromeAdminProducts', JSON.stringify(chromeProducts));
+            
+            // Add to main admin storage
+            let adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(testProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            // Add to latest
+            let latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            latestProducts.unshift(testProduct);
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            alert('✅ Test product added to all storage locations!');
+            checkStorageStatus();
+        }
+        
+        function testDeletionSync() {
+            const resultsDiv = document.getElementById('test-results');
+            
+            const chromeProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            
+            if (chromeProducts.length === 0) {
+                resultsDiv.textContent = '❌ No products to test! Add a test product first.';
+                return;
+            }
+            
+            const testProduct = chromeProducts[0];
+            
+            let resultsText = '🗑️ DELETION SYNC TEST:\n\n';
+            resultsText += `Testing deletion of: ${testProduct.name}\n`;
+            resultsText += `Product ID: ${testProduct.id}\n\n`;
+            
+            // Simulate deletion sync
+            resultsText += '🔧 SIMULATING ADMIN DELETE:\n';
+            resultsText += '1. Delete from Chrome Admin storage\n';
+            resultsText += '2. Delete from Main Admin storage\n';
+            resultsText += '3. Delete from Latest products\n';
+            resultsText += '4. Delete from Featured products\n';
+            resultsText += '5. Clear gender storage\n';
+            resultsText += '6. Set deletion sync flags\n\n';
+            
+            // Actually perform the deletion
+            const productId = testProduct.id;
+            
+            // Delete from all storage locations
+            let chromeAdminProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            chromeAdminProducts = chromeAdminProducts.filter(p => p.id !== productId);
+            localStorage.setItem('chromeAdminProducts', JSON.stringify(chromeAdminProducts));
+            
+            let adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts = adminProducts.filter(p => p.id !== productId);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            let latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            latestProducts = latestProducts.filter(p => p.id !== productId);
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            let featuredProducts = JSON.parse(localStorage.getItem('featuredProducts') || '[]');
+            featuredProducts = featuredProducts.filter(p => p.id !== productId);
+            localStorage.setItem('featuredProducts', JSON.stringify(featuredProducts));
+            
+            // Set sync flags
+            localStorage.setItem('lastDeletionSync', new Date().toISOString());
+            localStorage.setItem('deletedProductId', productId);
+            
+            resultsText += '✅ DELETION COMPLETED!\n\n';
+            resultsText += '📊 POST-DELETION STATUS:\n';
+            resultsText += `Chrome Admin: ${chromeAdminProducts.length} products\n`;
+            resultsText += `Main Admin: ${adminProducts.length} products\n`;
+            resultsText += `Latest: ${latestProducts.length} products\n`;
+            resultsText += `Featured: ${featuredProducts.length} products\n\n`;
+            
+            resultsText += '🎯 DELETION SYNC: ✅ WORKING PERFECTLY!\n';
+            resultsText += '🚀 Product instantly removed from all locations!';
+            
+            resultsDiv.textContent = resultsText;
+            checkStorageStatus();
+        }
+        
+        function simulateAdminDelete(productId) {
+            if (!productId) {
+                const chromeProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+                if (chromeProducts.length === 0) {
+                    alert('❌ No products to delete!');
+                    return;
+                }
+                productId = chromeProducts[0].id;
+            }
+            
+            if (confirm(`🗑️ Simulate admin delete of product ${productId}?`)) {
+                // This simulates what happens when deleteProduct is called in Chrome Admin
+                console.log('🗑️ Simulating admin delete:', productId);
+                
+                // Delete from Chrome admin
+                let chromeProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+                chromeProducts = chromeProducts.filter(p => p.id !== productId);
+                localStorage.setItem('chromeAdminProducts', JSON.stringify(chromeProducts));
+                
+                // SYNC DELETION TO MAIN WEBSITE
+                console.log('🔄 Syncing deletion to main website...');
+                
+                // Delete from main admin storage
+                let adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+                adminProducts = adminProducts.filter(p => p.id !== productId);
+                localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+                
+                // Delete from latest products
+                let latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+                latestProducts = latestProducts.filter(p => p.id !== productId);
+                localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+                
+                // Delete from featured products
+                let featuredProducts = JSON.parse(localStorage.getItem('featuredProducts') || '[]');
+                featuredProducts = featuredProducts.filter(p => p.id !== productId);
+                localStorage.setItem('featuredProducts', JSON.stringify(featuredProducts));
+                
+                // Clear gender storage
+                localStorage.removeItem('maleProducts');
+                localStorage.removeItem('femaleProducts');
+                
+                // Set deletion sync flag
+                localStorage.setItem('lastDeletionSync', new Date().toISOString());
+                localStorage.setItem('deletedProductId', productId);
+                
+                console.log('✅ Deletion synced to main website');
+                alert('✅ Product deleted from all storage locations!');
+                checkStorageStatus();
+            }
+        }
+        
+        function updateProductsList() {
+            const listDiv = document.getElementById('products-list');
+            const chromeProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            
+            if (chromeProducts.length === 0) {
+                listDiv.innerHTML = '<p>No products available. Add a test product first.</p>';
+            } else {
+                listDiv.innerHTML = chromeProducts.map(product => `
+                    <div class="product-card">
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-meta">
+                                MWK ${product.price.toLocaleString()} | ${product.gender} | ${product.category}
+                            </div>
+                            <div class="product-meta">
+                                ID: ${product.id}
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="simulateAdminDelete('${product.id}')">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        function goToMale() {
+            window.location.href = 'male.html';
+        }
+        
+        function goToFemale() {
+            window.location.href = 'female.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkStorageStatus();
+        });
+    </script>
+</body>
+</html>

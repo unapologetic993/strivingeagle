@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+        }
+        .debug-info { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        button { 
+            padding: 10px 20px; 
+            margin: 5px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+        }
+        .clear-btn { background: #dc3545; }
+        .test-btn { background: #28a745; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Striving Eagle Debug Page</h1>
+    
+    <div class="debug-info">
+        <h2>📍 Current Page Info</h2>
+        <div id="page-info">Loading...</div>
+    </div>
+    
+    <div class="debug-info">
+        <h2>🔐 Authentication Status</h2>
+        <div id="auth-status">Checking...</div>
+    </div>
+    
+    <div class="debug-info">
+        <h2>🗂️ LocalStorage Status</h2>
+        <div id="storage-status">Checking...</div>
+    </div>
+    
+    <div class="debug-info">
+        <h2>🛠️ Debug Actions</h2>
+        <button class="clear-btn" onclick="clearAllData()">🗑️ Clear All Data</button>
+        <button class="test-btn" onclick="testLogin()">🧪 Test Login</button>
+        <button class="test-btn" onclick="goToMain()">🏠 Go to Main Site</button>
+        <button class="test-btn" onclick="goToAdmin()">⚙️ Go to Admin</button>
+    </div>
+    
+    <div class="debug-info">
+        <h2>📝 Console Log</h2>
+        <div id="console-log" style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; max-height: 200px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        // Override console.log to show on page
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function addToConsole(message, type = 'log') {
+            const logDiv = document.getElementById('console-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? 'red' : type === 'warn' ? 'orange' : 'black';
+            logDiv.innerHTML += `<div style="color: ${color};">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToConsole(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToConsole(args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addToConsole(args.join(' '), 'warn');
+        };
+        
+        // Page info
+        function updatePageInfo() {
+            const pageInfo = document.getElementById('page-info');
+            pageInfo.innerHTML = `
+                <div><strong>URL:</strong> ${window.location.href}</div>
+                <div><strong>Path:</strong> ${window.location.pathname}</div>
+                <div><strong>Current File:</strong> ${window.location.pathname.split('/').pop()}</div>
+            `;
+        }
+        
+        // Auth status
+        function updateAuthStatus() {
+            const authStatus = document.getElementById('auth-status');
+            try {
+                if (typeof auth !== 'undefined') {
+                    const isLoggedIn = auth.isLoggedIn();
+                    const isAdmin = auth.isAdmin();
+                    const currentUser = auth.getCurrentUser();
+                    
+                    authStatus.innerHTML = `
+                        <div class="status ${isLoggedIn ? 'success' : 'warning'}">
+                            Logged In: ${isLoggedIn ? '✅ Yes' : '❌ No'}
+                        </div>
+                        <div class="status ${isAdmin ? 'success' : 'warning'}">
+                            Admin: ${isAdmin ? '✅ Yes' : '❌ No'}
+                        </div>
+                        <div><strong>Current User:</strong> ${currentUser ? currentUser.name : 'None'}</div>
+                    `;
+                } else {
+                    authStatus.innerHTML = '<div class="status error">❌ Auth system not loaded</div>';
+                }
+            } catch (error) {
+                authStatus.innerHTML = `<div class="status error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Storage status
+        function updateStorageStatus() {
+            const storageStatus = document.getElementById('storage-status');
+            const keys = Object.keys(localStorage);
+            let html = '';
+            
+            keys.forEach(key => {
+                const value = localStorage.getItem(key);
+                const isJson = value.startsWith('{') || value.startsWith('[');
+                html += `<div><strong>${key}:</strong> ${isJson ? 'JSON Data' : value}</div>`;
+            });
+            
+            storageStatus.innerHTML = html || '<div><em>No data in localStorage</em></div>';
+        }
+        
+        // Actions
+        function clearAllData() {
+            if (confirm('This will clear all localStorage data. Continue?')) {
+                localStorage.clear();
+                updateAuthStatus();
+                updateStorageStatus();
+                addToConsole('All localStorage data cleared', 'warn');
+            }
+        }
+        
+        function testLogin() {
+            if (typeof auth !== 'undefined') {
+                addToConsole('Testing login...', 'warn');
+                // This would normally redirect, but we'll just log it
+                auth.login('charlesluhanga77@gmail.com', 'ChisomoXCharles08');
+            } else {
+                addToConsole('Auth system not available', 'error');
+            }
+        }
+        
+        function goToMain() {
+            window.location.href = 'index.html';
+        }
+        
+        function goToAdmin() {
+            window.location.href = 'admin/dashboard.html';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePageInfo();
+            updateAuthStatus();
+            updateStorageStatus();
+            
+            // Update every 2 seconds
+            setInterval(() => {
+                updateAuthStatus();
+                updateStorageStatus();
+            }, 2000);
+            
+            addToConsole('Debug page loaded successfully', 'success');
+        });
+    </script>
+</body>
+</html>

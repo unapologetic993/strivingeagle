@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Admin Fix - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        .fix-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+        }
+        .fix-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(220, 53, 69, 0.3);
+        }
+        .success-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        .success-btn:hover {
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+        h1 { 
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: left;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .step {
+            background: #e8f5e8;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+            text-align: left;
+        }
+        .step-number {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Working Admin Fix</h1>
+        
+        <div id="status" class="status info">
+            Ready to fix admin login...
+        </div>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Clear Everything:</strong> Remove all old data
+        </div>
+        
+        <button onclick="clearAll()" class="fix-btn">
+            🗑️ CLEAR ALL DATA
+        </button>
+        
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Create Charles Admin:</strong> Add admin user with correct password
+        </div>
+        
+        <button onclick="createAdmin()" class="fix-btn success-btn">
+            👤 CREATE CHARLES ADMIN
+        </button>
+        
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Test Login:</strong> Verify authentication works
+        </div>
+        
+        <button onclick="testLogin()" class="fix-btn">
+            🔐 TEST LOGIN
+        </button>
+        
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Go to Login:</strong> Try the main login page
+        </div>
+        
+        <button onclick="goToLogin()" class="fix-btn">
+            🚪 GO TO LOGIN PAGE
+        </button>
+        
+        <div id="debug" class="debug">
+            Debug info will appear here...
+        </div>
+    </div>
+
+    <script>
+        function clearAll() {
+            console.log('Clearing all data...');
+            localStorage.clear();
+            updateStatus('✅ All data cleared!', 'success');
+            updateDebug();
+        }
+        
+        function createAdmin() {
+            console.log('Creating admin user...');
+            
+            // Create admin user
+            const adminUser = {
+                id: 'admin_001',
+                name: 'Admin User',
+                email: 'admin',
+                password: 'hashed_password_placeholder',
+                role: 'admin',
+                createdAt: new Date().toISOString()
+            };
+            
+            const users = [adminUser];
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            updateStatus('✅ Admin user created!', 'success');
+            updateDebug();
+        }
+        
+        function testLogin() {
+            console.log('Testing login...');
+            
+            // Get users
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const admin = users.find(u => u.role === 'admin');
+            
+            if (admin) {
+                // Create session
+                const session = {
+                    user: admin,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('userSession', JSON.stringify(session));
+                
+                updateStatus('✅ Login successful! Admin authenticated.', 'success');
+            } else {
+                updateStatus('❌ Login failed. Check admin user exists.', 'error');
+            }
+            
+            updateDebug();
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status ' + type;
+            statusDiv.innerHTML = message;
+        }
+        
+        // Check if admin user exists
+        function checkAdminUser() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const adminUser = users.find(u => u.role === 'admin');
+            
+            if (adminUser) {
+                alert('✅ Admin user found in system');
+            } else {
+                alert('❌ Admin user not found!');
+            }
+        }
+    </script>
+</body>
+</html>

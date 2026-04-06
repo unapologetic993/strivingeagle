@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .product-card:hover {
+            background: #e9ecef;
+        }
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            float: left;
+            margin-right: 15px;
+        }
+        .product-info {
+            overflow: hidden;
+        }
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .product-meta {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Product Details Test</h1>
+        
+        <div class="test-section">
+            <h3>Product Details Status</h3>
+            <div id="status" class="debug">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Actions</h3>
+            <button class="test-btn" onclick="checkProducts()">🔍 Check Products</button>
+            <button class="test-btn" onclick="addTestProduct()">➕ Add Test Product</button>
+            <button class="test-btn" onclick="testProductDetails()">🧪 Test Product Details</button>
+            <button class="test-btn" onclick="simulateClick()">👆 Simulate Product Click</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Available Products (Click to Test)</h3>
+            <div id="products-list"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToProductDetails()">🖼️ Go to Product Details</button>
+            <button class="test-btn" onclick="goToMale()">👨 Go to Male Page</button>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Go to Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function checkProducts() {
+            const status = document.getElementById('status');
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            
+            let statusText = '🔍 PRODUCT DETAILS STATUS:\n\n';
+            statusText += `Total Products: ${adminProducts.length}\n\n`;
+            
+            if (adminProducts.length === 0) {
+                statusText += '❌ No products found!\n';
+                statusText += 'Add products via Chrome Admin first.\n';
+            } else {
+                statusText += '✅ Products found:\n';
+                adminProducts.forEach((product, index) => {
+                    statusText += `${index + 1}. ${product.name}\n`;
+                    statusText += `   ID: ${product.id}\n`;
+                    statusText += `   Image: ${product.image ? 'Yes' : 'No'}\n`;
+                    statusText += `   Price: MWK ${product.price.toLocaleString()}\n`;
+                    statusText += `   Gender: ${product.gender}\n\n`;
+                });
+                
+                statusText += '🖼️ Image Status:\n';
+                adminProducts.forEach(product => {
+                    const hasImage = product.image && product.image !== '';
+                    statusText += `${product.name}: ${hasImage ? '✅ Has Image' : '❌ No Image'}\n`;
+                });
+            }
+            
+            status.textContent = statusText;
+            updateProductsList();
+        }
+        
+        function addTestProduct() {
+            const testProduct = {
+                id: 'test_product_' + Date.now(),
+                name: 'Test Product ' + new Date().toLocaleTimeString(),
+                price: 8500,
+                category: 'accessories',
+                gender: 'unisex',
+                ageGroup: 'adults',
+                sizes: ['s', 'm', 'l', 'xl'],
+                description: 'This is a test product for testing product details page functionality.',
+                image: 'https://picsum.photos/seed/test' + Date.now() + '/400/400.jpg',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(testProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            alert('✅ Test product added with image!');
+            checkProducts();
+        }
+        
+        function testProductDetails() {
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            
+            if (adminProducts.length === 0) {
+                alert('❌ No products to test! Add a product first.');
+                return;
+            }
+            
+            const firstProduct = adminProducts[0];
+            const status = document.getElementById('status');
+            
+            let statusText = '🧪 PRODUCT DETAILS TEST:\n\n';
+            statusText += `Testing Product: ${firstProduct.name}\n`;
+            statusText += `Product ID: ${firstProduct.id}\n\n`;
+            
+            statusText += 'What should happen on product.html:\n';
+            statusText += '1. URL: product.html?id=' + firstProduct.id + '\n';
+            statusText += '2. loadProductDetails() called\n';
+            statusText += '3. Product found in products array\n';
+            statusText += '4. displayProductDetails() called\n';
+            statusText += '5. Product image set to: ' + (firstProduct.image || 'fallback') + '\n';
+            statusText += '6. Product name, price, etc. displayed\n\n';
+            
+            statusText += 'Image Loading:\n';
+            if (firstProduct.image) {
+                statusText += '✅ Has image URL\n';
+                statusText += '✅ Will load image\n';
+                statusText += '✅ Fallback if image fails\n';
+            } else {
+                statusText += '❌ No image URL\n';
+                statusText += '✅ Will use placeholder\n';
+            }
+            
+            status.textContent = statusText;
+        }
+        
+        function simulateClick() {
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            
+            if (adminProducts.length === 0) {
+                alert('❌ No products to simulate click! Add a product first.');
+                return;
+            }
+            
+            const firstProduct = adminProducts[0];
+            
+            // Simulate what happens when clicking a product
+            console.log('👆 Simulating product click...');
+            console.log('Product ID:', firstProduct.id);
+            console.log('Redirecting to: product.html?id=' + firstProduct.id);
+            
+            alert(`👆 Simulating click on "${firstProduct.name}"\n\nWould redirect to:\nproduct.html?id=${firstProduct.id}\n\nProduct details page should show:\n- Product image\n- Product name\n- Price: MWK ${firstProduct.price.toLocaleString()}\n- Description\n- Size options`);
+        }
+        
+        function updateProductsList() {
+            const list = document.getElementById('products-list');
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            
+            if (adminProducts.length === 0) {
+                list.innerHTML = '<p>No products available. Add products first.</p>';
+            } else {
+                list.innerHTML = adminProducts.map(product => `
+                    <div class="product-card" onclick="testProductClick('${product.id}')">
+                        <img src="${product.image || 'https://via.placeholder.com/60x60?text=No+Image'}" 
+                             alt="${product.name}" 
+                             class="product-image"
+                             onerror="this.src='https://via.placeholder.com/60x60?text=Error'">
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-meta">
+                                MWK ${product.price.toLocaleString()} | ${product.gender} | ${product.category}
+                            </div>
+                            <div class="product-meta">
+                                Image: ${product.image ? '✅' : '❌'}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function testProductClick(productId) {
+            const product = JSON.parse(localStorage.getItem('adminProducts') || '[]').find(p => p.id === productId);
+            if (product) {
+                alert(`🖼️ Testing "${product.name}"\n\nClick "Go to Product Details" to see the actual page.\n\nExpected:\n- Image: ${product.image ? 'Product image' : 'Placeholder'}\n- Name: ${product.name}\n- Price: MWK ${product.price.toLocaleString()}\n- Gender: ${product.gender}\n- Description: ${product.description}`);
+            }
+        }
+        
+        function goToProductDetails() {
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            
+            if (adminProducts.length === 0) {
+                alert('❌ No products available! Add a product first.');
+                return;
+            }
+            
+            const firstProduct = adminProducts[0];
+            window.location.href = `product.html?id=${firstProduct.id}`;
+        }
+        
+        function goToMale() {
+            window.location.href = 'male.html';
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkProducts();
+        });
+    </script>
+</body>
+</html>

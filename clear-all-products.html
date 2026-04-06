@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear All Products - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        .fix-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+        }
+        .fix-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(220, 53, 69, 0.3);
+        }
+        .success-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        .success-btn:hover {
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+        h1 { 
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: left;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .step {
+            background: #e8f5e8;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+            text-align: left;
+        }
+        .step-number {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Clear All Products</h1>
+        
+        <div id="status" class="status info">
+            Ready to clear all products from admin dashboard...
+        </div>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Clear Chrome Admin Products:</strong> Remove all products from Chrome admin
+        </div>
+        
+        <button onclick="clearChromeAdminProducts()" class="fix-btn">
+            🗑️ CLEAR CHROME ADMIN PRODUCTS
+        </button>
+        
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Clear Main Admin Products:</strong> Remove all products from main admin
+        </div>
+        
+        <button onclick="clearMainAdminProducts()" class="fix-btn">
+            🗑️ CLEAR MAIN ADMIN PRODUCTS
+        </button>
+        
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Clear Main Website Products:</strong> Remove products from home page and categories
+        </div>
+        
+        <button onclick="clearWebsiteProducts()" class="fix-btn">
+            🗑️ CLEAR WEBSITE PRODUCTS
+        </button>
+        
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Clear All Product Data:</strong> Remove all product-related data
+        </div>
+        
+        <button onclick="clearAllProductData()" class="fix-btn success-btn">
+            🧹 CLEAR ALL PRODUCT DATA
+        </button>
+        
+        <div class="step">
+            <span class="step-number">5</span>
+            <strong>Go to Home Page:</strong> Check the clean main website
+        </div>
+        
+        <button onclick="goToHomePage()" class="fix-btn">
+            🏠 GO TO HOME PAGE
+        </button>
+        
+        <div class="step">
+            <span class="step-number">6</span>
+            <strong>Go to Chrome Admin:</strong> Check the clean admin dashboard
+        </div>
+        
+        <button onclick="goToChromeAdmin()" class="fix-btn">
+            🚪 GO TO CHROME ADMIN
+        </button>
+        
+        <div class="step">
+            <span class="step-number">7</span>
+            <strong>Go to Main Admin:</strong> Check the main admin dashboard
+        </div>
+        
+        <button onclick="goToMainAdmin()" class="fix-btn">
+            🚪 GO TO MAIN ADMIN
+        </button>
+        
+        <div id="debug" class="debug">
+            Debug info will appear here...
+        </div>
+    </div>
+
+    <script>
+        function clearChromeAdminProducts() {
+            console.log('Clearing Chrome admin products...');
+            
+            // Clear Chrome admin products
+            localStorage.removeItem('chromeAdminProducts');
+            
+            updateStatus('✅ Chrome admin products cleared!', 'success');
+            updateDebug();
+        }
+        
+        function clearMainAdminProducts() {
+            console.log('Clearing main admin products...');
+            
+            // Clear main admin products
+            localStorage.removeItem('adminProducts');
+            localStorage.removeItem('products');
+            
+            updateStatus('✅ Main admin products cleared!', 'success');
+            updateDebug();
+        }
+        
+        function clearWebsiteProducts() {
+            console.log('Clearing main website products...');
+            
+            // Clear main website products
+            localStorage.removeItem('maleProducts');
+            localStorage.removeItem('femaleProducts');
+            localStorage.removeItem('latestProducts');
+            localStorage.removeItem('featuredProducts');
+            localStorage.removeItem('allProducts');
+            
+            updateStatus('✅ Main website products cleared! Home page and categories are now empty.', 'success');
+            updateDebug();
+        }
+        
+        function clearAllProductData() {
+            console.log('Clearing all product data...');
+            
+            // Clear ALL product-related data
+            localStorage.removeItem('chromeAdminProducts');
+            localStorage.removeItem('adminProducts');
+            localStorage.removeItem('products');
+            localStorage.removeItem('customerOrders');
+            localStorage.removeItem('chromeAdminOrders');
+            
+            // Clear main website products
+            localStorage.removeItem('maleProducts');
+            localStorage.removeItem('femaleProducts');
+            localStorage.removeItem('latestProducts');
+            localStorage.removeItem('featuredProducts');
+            localStorage.removeItem('allProducts');
+            
+            updateStatus('✅ All product data cleared! Both admin dashboards and main website are now empty.', 'success');
+            updateDebug();
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        function goToMainAdmin() {
+            window.location.href = 'admin/dashboard.html';
+        }
+        
+        function goToHomePage() {
+            window.location.href = 'index.html';
+        }
+        
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status ' + type;
+            statusDiv.innerHTML = message;
+        }
+        
+        function updateDebug() {
+            const debugDiv = document.getElementById('debug');
+            
+            let debugInfo = '🔍 PRODUCT DATA DEBUG INFO:\n\n';
+            
+            // Check Chrome admin products
+            const chromeProducts = localStorage.getItem('chromeAdminProducts');
+            if (chromeProducts) {
+                const products = JSON.parse(chromeProducts);
+                debugInfo += 'Chrome Admin Products: ' + products.length + ' items\n';
+                products.forEach((product, index) => {
+                    debugInfo += '  ' + (index + 1) + '. ' + product.name + ' (ID: ' + product.id + ')\n';
+                });
+            } else {
+                debugInfo += 'Chrome Admin Products: None (cleared)\n';
+            }
+            
+            // Check main admin products
+            const mainProducts = localStorage.getItem('adminProducts');
+            if (mainProducts) {
+                const products = JSON.parse(mainProducts);
+                debugInfo += '\nMain Admin Products: ' + products.length + ' items\n';
+                products.forEach((product, index) => {
+                    debugInfo += '  ' + (index + 1) + '. ' + product.name + ' (ID: ' + product.id + ')\n';
+                });
+            } else {
+                debugInfo += '\nMain Admin Products: None (cleared)\n';
+            }
+            
+            // Check website products
+            const maleProducts = localStorage.getItem('maleProducts');
+            if (maleProducts) {
+                const products = JSON.parse(maleProducts);
+                debugInfo += '\nMale Section Products: ' + products.length + ' items\n';
+            } else {
+                debugInfo += '\nMale Section Products: None (cleared)\n';
+            }
+            
+            const femaleProducts = localStorage.getItem('femaleProducts');
+            if (femaleProducts) {
+                const products = JSON.parse(femaleProducts);
+                debugInfo += 'Female Section Products: ' + products.length + ' items\n';
+            } else {
+                debugInfo += 'Female Section Products: None (cleared)\n';
+            }
+            
+            const latestProducts = localStorage.getItem('latestProducts');
+            if (latestProducts) {
+                const products = JSON.parse(latestProducts);
+                debugInfo += 'Latest Products: ' + products.length + ' items\n';
+            } else {
+                debugInfo += 'Latest Products: None (cleared)\n';
+            }
+            
+            const featuredProducts = localStorage.getItem('featuredProducts');
+            if (featuredProducts) {
+                const products = JSON.parse(featuredProducts);
+                debugInfo += 'Featured Products: ' + products.length + ' items\n';
+            } else {
+                debugInfo += 'Featured Products: None (cleared)\n';
+            }
+            
+            // Check other product data
+            const generalProducts = localStorage.getItem('products');
+            if (generalProducts) {
+                const products = JSON.parse(generalProducts);
+                debugInfo += '\nGeneral Products: ' + products.length + ' items\n';
+                products.forEach((product, index) => {
+                    debugInfo += '  ' + (index + 1) + '. ' + product.name + ' (ID: ' + product.id + ')\n';
+                });
+            } else {
+                debugInfo += '\nGeneral Products: None (cleared)\n';
+            }
+            
+            // Check orders
+            const orders = localStorage.getItem('customerOrders');
+            if (orders) {
+                const orderData = JSON.parse(orders);
+                debugInfo += '\nCustomer Orders: ' + orderData.length + ' orders\n';
+            } else {
+                debugInfo += '\nCustomer Orders: None (cleared)\n';
+            }
+            
+            debugDiv.textContent = debugInfo;
+        }
+        
+        // Auto-check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDebug();
+        });
+    </script>
+</body>
+</html>

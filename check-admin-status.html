@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Admin Status - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 { color: #007bff; margin-bottom: 30px; }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .user-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .user-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+            background: white;
+        }
+        .user-item.admin {
+            border-left-color: #28a745;
+        }
+        .login-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .login-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Check Admin Status</h1>
+        
+        <div id="status" class="status warning">
+            Checking current admin status...
+        </div>
+        
+        <div id="user-list" class="user-list">
+            Loading user accounts...
+        </div>
+        
+        <div id="actions">
+            <button onclick="goToLogin()" class="login-btn">
+                🔐 Go to Login Page
+            </button>
+            <button onclick="updateToCharles()" class="login-btn" style="background: #007bff;">
+                👤 Update to "Charles"
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function checkAdminStatus() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const adminAccounts = users.filter(u => u.role === 'admin');
+            const statusDiv = document.getElementById('status');
+            const userListDiv = document.getElementById('user-list');
+            
+            if (adminAccounts.length === 0) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '❌ No admin accounts found';
+                userListDiv.innerHTML = '<p>No admin accounts in system</p>';
+            } else {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = `✅ Found ${adminAccounts.length} admin account(s)`;
+                
+                let userListHTML = '<h3>👤 Admin Accounts:</h3>';
+                adminAccounts.forEach(user => {
+                    const isCharles = user.email === 'Charles';
+                    userListHTML += `
+                        <div class="user-item admin">
+                            <strong>Username:</strong> ${user.email}<br>
+                            <strong>Role:</strong> ${user.role}<br>
+                            <strong>ID:</strong> ${user.id}<br>
+                            <strong>Status:</strong> ${isCharles ? '✅ Updated to Charles' : '⚠️ Not updated'}
+                        </div>
+                    `;
+                });
+                
+                userListDiv.innerHTML = userListHTML;
+            }
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        function updateToCharles() {
+            window.location.href = 'update-admin-charles.html';
+        }
+        
+        // Check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminStatus();
+        });
+    </script>
+</body>
+</html>

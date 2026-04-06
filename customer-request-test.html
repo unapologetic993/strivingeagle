@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Product Request Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        .btn.success {
+            background: #28a745;
+        }
+        .btn.success:hover {
+            background: #218838;
+        }
+        .btn.danger {
+            background: #dc3545;
+        }
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+        .status-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .success-box {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .warning-box {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .request-preview {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+            margin-top: 15px;
+        }
+        .notification-badge {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛍️ Customer Product Request Test</h1>
+        
+        <div id="status-message" class="status-box warning-box">
+            <h3>📧 Send Product Request to Admin</h3>
+            <p>Simulate a customer requesting a product and test if admin receives notification.</p>
+        </div>
+        
+        <div class="test-section">
+            <h3>📝 Customer Request Form</h3>
+            <form id="request-form">
+                <div class="form-group">
+                    <label class="form-label">Customer Name *</label>
+                    <input type="text" id="customer-name" class="form-input" required placeholder="John Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Customer Email *</label>
+                    <input type="email" id="customer-email" class="form-input" required placeholder="john@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Customer Phone</label>
+                    <input type="tel" id="customer-phone" class="form-input" placeholder="+265 123 456 789">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Product Name *</label>
+                    <input type="text" id="product-name" class="form-input" required placeholder="Nike Air Max Shoes">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Product Category *</label>
+                    <select id="product-category" class="form-select" required>
+                        <option value="">Select Category</option>
+                        <optgroup label="Tops">
+                            <option value="t-shirts">T-Shirts</option>
+                            <option value="tank-tops">Tank Tops</option>
+                            <option value="crop-tops">Crop Tops</option>
+                            <option value="blouses">Blouses</option>
+                            <option value="polo-shirts">Polo Shirts</option>
+                            <option value="hoodies">Hoodies</option>
+                            <option value="sweaters">Sweaters</option>
+                        </optgroup>
+                        <optgroup label="Bottoms">
+                            <option value="jeans">Jeans</option>
+                            <option value="shorts">Shorts</option>
+                            <option value="skirts">Skirts</option>
+                            <option value="leggings">Leggings</option>
+                            <option value="cargo-pants">Cargo Pants</option>
+                            <option value="sweatpants">Sweatpants</option>
+                            <option value="underwear">Underwear</option>
+                        </optgroup>
+                        <optgroup label="Outerwear">
+                            <option value="coats">Coats</option>
+                            <option value="blazers">Blazers</option>
+                            <option value="suits">Suits</option>
+                        </optgroup>
+                        <optgroup label="Dresses">
+                            <option value="dresses">Dresses</option>
+                        </optgroup>
+                        <optgroup label="Activewear">
+                            <option value="activewear">Activewear</option>
+                            <option value="sports-bras">Sports Bras</option>
+                        </optgroup>
+                        <optgroup label="Footwear">
+                            <option value="sneakers">Sneakers</option>
+                            <option value="boots">Boots</option>
+                            <option value="sandals">Sandals</option>
+                            <option value="heels">Heels</option>
+                        </optgroup>
+                        <optgroup label="Accessories">
+                            <option value="glasses">Glasses</option>
+                            <option value="earrings">Earrings</option>
+                            <option value="socks">Socks</option>
+                            <option value="hats">Hats</option>
+                            <option value="caps">Caps</option>
+                            <option value="beanies">Beanies</option>
+                            <option value="gloves">Gloves</option>
+                            <option value="backpacks">Backpacks</option>
+                            <option value="jewellery">Jewellery</option>
+                        </optgroup>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Gender *</label>
+                    <select id="product-gender" class="form-select" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="unisex">Unisex</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Age Group *</label>
+                    <select id="product-age" class="form-select" required>
+                        <option value="">Select Age Group</option>
+                        <option value="all-ages">All Ages</option>
+                        <option value="kids">Kids</option>
+                        <option value="teens">Teens</option>
+                        <option value="adults">Adults</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Preferred Size</label>
+                    <input type="text" id="product-size" class="form-input" placeholder="L, XL, etc.">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Budget Range</label>
+                    <input type="text" id="product-budget" class="form-input" placeholder="MWK 5,000 - 10,000">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Product Description *</label>
+                    <textarea id="product-description" class="form-textarea" required placeholder="Please describe the product you're looking for..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Urgency</label>
+                    <select id="request-urgency" class="form-select">
+                        <option value="normal">Normal (Within a week)</option>
+                        <option value="urgent">Urgent (Within 2-3 days)</option>
+                        <option value="very-urgent">Very Urgent (Today/Tomorrow)</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn success">
+                    <i class="fas fa-paper-plane"></i> Send Request to Admin
+                </button>
+                <button type="button" class="btn" onclick="fillSampleData()">
+                    <i class="fas fa-magic"></i> Fill Sample Data
+                </button>
+                <button type="button" class="btn danger" onclick="clearForm()">
+                    <i class="fas fa-times"></i> Clear Form
+                </button>
+            </form>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Request Status</h3>
+            <div id="request-status" class="debug">No request sent yet...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔔 Admin Notification Test</h3>
+            <div id="admin-notification" class="request-preview">
+                <p><strong>Admin Dashboard Status:</strong></p>
+                <p>📧 Check your admin dashboard to see if this request appears as a notification.</p>
+                <p><a href="admin/chrome-admin-new.html" target="_blank" class="btn" style="margin-top: 10px;">
+                    🔧 Open Admin Dashboard
+                </a></p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 Test Actions</h3>
+            <button class="btn" onclick="checkAdminNotifications()">📊 Check Admin Notifications</button>
+            <button class="btn success" onclick="sendMultipleRequests()">📧 Send Multiple Requests</button>
+            <button class="btn danger" onclick="clearAllRequests()">🗑️ Clear All Requests</button>
+        </div>
+    </div>
+
+    <script>
+        let requestIdCounter = 1;
+        
+        document.getElementById('request-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendProductRequest();
+        });
+        
+        function sendProductRequest() {
+            const request = {
+                id: 'req_' + Date.now(),
+                requestId: 'REQ-' + String(requestIdCounter++).padStart(4, '0'),
+                customerName: document.getElementById('customer-name').value,
+                customerEmail: document.getElementById('customer-email').value,
+                customerPhone: document.getElementById('customer-phone').value,
+                productName: document.getElementById('product-name').value,
+                productCategory: document.getElementById('product-category').value,
+                productGender: document.getElementById('product-gender').value,
+                productAge: document.getElementById('product-age').value,
+                productSize: document.getElementById('product-size').value,
+                productBudget: document.getElementById('product-budget').value,
+                productDescription: document.getElementById('product-description').value,
+                requestUrgency: document.getElementById('request-urgency').value,
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                type: 'product-request'
+            };
+            
+            // Save to localStorage (simulating database)
+            let requests = JSON.parse(localStorage.getItem('customerRequests') || '[]');
+            requests.unshift(request); // Add to beginning
+            localStorage.setItem('customerRequests', JSON.stringify(requests));
+            
+            // Also save to admin notifications
+            let notifications = JSON.parse(localStorage.getItem('adminNotifications') || '[]');
+            const notification = {
+                id: 'notif_' + Date.now(),
+                type: 'product-request',
+                title: `New Product Request: ${request.productName}`,
+                message: `${request.customerName} is requesting: ${request.productName}`,
+                requestId: request.id,
+                customerName: request.customerName,
+                customerEmail: request.customerEmail,
+                urgency: request.requestUrgency,
+                status: 'unread',
+                createdAt: new Date().toISOString()
+            };
+            notifications.unshift(notification);
+            localStorage.setItem('adminNotifications', JSON.stringify(notifications));
+            
+            // Update status
+            updateRequestStatus(request);
+            
+            // Show success message
+            updateStatus('✅ Request Sent Successfully!', 'success');
+            
+            alert(`✅ Product request sent to admin!\n\nRequest ID: ${request.requestId}\nProduct: ${request.productName}\nCustomer: ${request.customerName}\n\nCheck admin dashboard for notification.`);
+            
+            // Clear form
+            clearForm();
+        }
+        
+        function updateRequestStatus(request) {
+            const statusDiv = document.getElementById('request-status');
+            let statusText = `📧 REQUEST SENT SUCCESSFULLY!\n\n`;
+            statusText += `Request ID: ${request.requestId}\n`;
+            statusText += `Customer: ${request.customerName}\n`;
+            statusText += `Email: ${request.customerEmail}\n`;
+            statusText += `Phone: ${request.customerPhone || 'Not provided'}\n\n`;
+            
+            statusText += `PRODUCT DETAILS:\n`;
+            statusText += `Name: ${request.productName}\n`;
+            statusText += `Category: ${request.productCategory}\n`;
+            statusText += `Gender: ${request.productGender}\n`;
+            statusText += `Age Group: ${request.productAge}\n`;
+            statusText += `Size: ${request.productSize || 'Not specified'}\n`;
+            statusText += `Budget: ${request.productBudget || 'Not specified'}\n`;
+            statusText += `Urgency: ${request.requestUrgency}\n\n`;
+            
+            statusText += `Description: ${request.productDescription}\n\n`;
+            
+            statusText += `📅 Sent: ${new Date(request.createdAt).toLocaleString()}\n`;
+            statusText += `🔔 Status: ${request.status}\n\n`;
+            
+            statusText += `✅ Request saved to admin notifications!\n`;
+            statusText += `🔧 Check admin dashboard to see notification.`;
+            
+            statusDiv.textContent = statusText;
+            
+            // Update admin notification preview
+            updateAdminNotificationPreview(request);
+        }
+        
+        function updateAdminNotificationPreview(request) {
+            const notificationDiv = document.getElementById('admin-notification');
+            notificationDiv.innerHTML = `
+                <div class="request-preview">
+                    <h4>🔔 New Admin Notification Created!</h4>
+                    <p><strong>Request ID:</strong> ${request.requestId}</p>
+                    <p><strong>Customer:</strong> ${request.customerName} (${request.customerEmail})</p>
+                    <p><strong>Product:</strong> ${request.productName}</p>
+                    <p><strong>Category:</strong> ${request.productCategory} | ${request.productGender} | ${request.productAge}</p>
+                    <p><strong>Urgency:</strong> ${request.requestUrgency}</p>
+                    <p><strong>Status:</strong> <span class="notification-badge">NEW</span></p>
+                    <p><strong>Sent:</strong> ${new Date(request.createdAt).toLocaleString()}</p>
+                    <hr style="margin: 15px 0;">
+                    <p><strong>📧 Admin Action Required:</strong></p>
+                    <ul>
+                        <li>Review customer request</li>
+                        <li>Check if product is available</li>
+                        <li>Contact customer about availability</li>
+                        <li>Update request status</li>
+                    </ul>
+                    <p><a href="admin/chrome-admin-new.html" target="_blank" class="btn" style="margin-top: 10px;">
+                        🔧 Open Admin Dashboard to See Notification
+                    </a></p>
+                </div>
+            `;
+        }
+        
+        function fillSampleData() {
+            document.getElementById('customer-name').value = 'Alice Johnson';
+            document.getElementById('customer-email').value = 'alice.johnson@example.com';
+            document.getElementById('customer-phone').value = '+265 999 123 456';
+            document.getElementById('product-name').value = 'Nike Air Max 270';
+            document.getElementById('product-category').value = 'shoes';
+            document.getElementById('product-gender').value = 'female';
+            document.getElementById('product-age').value = 'adults';
+            document.getElementById('product-size').value = 'Size 8';
+            document.getElementById('product-budget').value = 'MWK 45,000 - 60,000';
+            document.getElementById('product-description').value = 'I am looking for Nike Air Max 270 shoes in pink or white color. I need them for an upcoming event next weekend. Please let me know if you have them in stock or can order them.';
+            document.getElementById('request-urgency').value = 'urgent';
+        }
+        
+        function clearForm() {
+            document.getElementById('request-form').reset();
+            document.getElementById('request-status').textContent = 'No request sent yet...';
+            document.getElementById('admin-notification').innerHTML = `
+                <p><strong>Admin Dashboard Status:</strong></p>
+                <p>📧 Check your admin dashboard to see if this request appears as a notification.</p>
+                <p><a href="admin/chrome-admin-new.html" target="_blank" class="btn" style="margin-top: 10px;">
+                    🔧 Open Admin Dashboard
+                </a></p>
+            `;
+        }
+        
+        function checkAdminNotifications() {
+            const notifications = JSON.parse(localStorage.getItem('adminNotifications') || '[]');
+            const requests = JSON.parse(localStorage.getItem('customerRequests') || '[]');
+            
+            const statusDiv = document.getElementById('request-status');
+            let statusText = `📊 ADMIN NOTIFICATIONS STATUS:\n\n`;
+            statusText += `Total Notifications: ${notifications.length}\n`;
+            statusText += `Total Requests: ${requests.length}\n\n`;
+            
+            if (notifications.length > 0) {
+                statusText += `🔔 RECENT NOTIFICATIONS:\n`;
+                notifications.slice(0, 5).forEach((notif, index) => {
+                    statusText += `${index + 1}. ${notif.title}\n`;
+                    statusText += `   Status: ${notif.status}\n`;
+                    statusText += `   Created: ${new Date(notif.createdAt).toLocaleString()}\n\n`;
+                });
+            } else {
+                statusText += '📭 No notifications found.\n\n';
+                statusText += 'Send a request to create notifications.';
+            }
+            
+            statusDiv.textContent = statusText;
+        }
+        
+        function sendMultipleRequests() {
+            const sampleRequests = [
+                {
+                    customerName: 'Bob Smith',
+                    customerEmail: 'bob.smith@example.com',
+                    productName: 'Adidas Originals Hoodie',
+                    productCategory: 'accessories',
+                    productGender: 'male',
+                    productAge: 'adults',
+                    productDescription: 'Looking for Adidas Originals hoodie in black color, size L.',
+                    requestUrgency: 'normal'
+                },
+                {
+                    customerName: 'Carol White',
+                    customerEmail: 'carol.white@example.com',
+                    productName: 'Designer Sunglasses',
+                    productCategory: 'glasses',
+                    productGender: 'female',
+                    productAge: 'all-ages',
+                    productDescription: 'Need designer sunglasses for summer vacation.',
+                    requestUrgency: 'urgent'
+                }
+            ];
+            
+            sampleRequests.forEach((sampleData, index) => {
+                setTimeout(() => {
+                    document.getElementById('customer-name').value = sampleData.customerName;
+                    document.getElementById('customer-email').value = sampleData.customerEmail;
+                    document.getElementById('product-name').value = sampleData.productName;
+                    document.getElementById('product-category').value = sampleData.productCategory;
+                    document.getElementById('product-gender').value = sampleData.productGender;
+                    document.getElementById('product-age').value = sampleData.productAge;
+                    document.getElementById('product-description').value = sampleData.productDescription;
+                    document.getElementById('request-urgency').value = sampleData.requestUrgency;
+                    
+                    sendProductRequest();
+                }, index * 1000);
+            });
+        }
+        
+        function clearAllRequests() {
+            if (!confirm('🗑️ Clear all customer requests and notifications?\n\nThis will remove all test data.')) return;
+            
+            localStorage.setItem('customerRequests', JSON.stringify([]));
+            localStorage.setItem('adminNotifications', JSON.stringify([]));
+            
+            alert('✅ All requests and notifications cleared!');
+            clearForm();
+        }
+        
+        function updateStatus(message, type = 'success') {
+            const statusBox = document.getElementById('status-message');
+            statusBox.className = `status-box ${type}-box`;
+            statusBox.innerHTML = `<h3>${message}</h3>`;
+        }
+    </script>
+</body>
+</html>

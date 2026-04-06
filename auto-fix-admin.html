@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Fix Admin Account - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 18px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        h1 { color: #2c3e50; }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🔧 Auto Fix Admin Account</h1>
+            <p>This page will automatically remove duplicate customer accounts and keep only the admin account.</p>
+            
+            <div id="status">
+                <div class="status warning">Ready to fix admin account...</div>
+            </div>
+            
+            <button onclick="autoFix()" id="fix-btn">
+                🚀 Auto Fix Admin Account
+            </button>
+            
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function autoFix() {
+            const statusDiv = document.getElementById('status');
+            const resultDiv = document.getElementById('result');
+            const fixBtn = document.getElementById('fix-btn');
+            
+            // Show loading
+            statusDiv.innerHTML = '<div class="status warning">🔄 Fixing admin account...</div>';
+            resultDiv.innerHTML = '<div class="spinner"></div>';
+            fixBtn.disabled = true;
+            
+            setTimeout(() => {
+                // Get users from localStorage
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const adminEmail = 'charlesluhanga77@gmail.com';
+                
+                console.log('🔍 Checking for duplicate accounts...');
+                console.log('Total users:', users.length);
+                
+                const duplicateAccounts = users.filter(u => u.email === adminEmail);
+                console.log('Accounts with admin email:', duplicateAccounts.length);
+                
+                duplicateAccounts.forEach(user => {
+                    console.log('- Found:', user.email, 'Role:', user.role, 'ID:', user.id);
+                });
+                
+                // Remove customer accounts with admin email, keep only admin account
+                const filteredUsers = users.filter(user => {
+                    if (user.email === adminEmail) {
+                        return user.role === 'admin'; // Keep only admin account
+                    }
+                    return true; // Keep all other users
+                });
+                
+                console.log('After filtering:');
+                console.log('Total users:', filteredUsers.length);
+                
+                const remainingAdminAccounts = filteredUsers.filter(u => u.email === adminEmail && u.role === 'admin');
+                console.log('Admin accounts remaining:', remainingAdminAccounts.length);
+                
+                // Save back to localStorage
+                localStorage.setItem('users', JSON.stringify(filteredUsers));
+                
+                // Clear session
+                localStorage.removeItem('userSession');
+                
+                // Show result
+                statusDiv.innerHTML = '<div class="status success">✅ Admin account fixed successfully!</div>';
+                resultDiv.innerHTML = `
+                    <div class="status success">
+                        <strong>🎯 Fix Complete!</strong><br>
+                        📊 Removed ${users.length - filteredUsers.length} duplicate accounts<br>
+                        👤 Admin account preserved<br>
+                        🔐 Session cleared<br>
+                        🚀 Ready to login as admin
+                    </div>
+                    <button onclick="testAdminLogin()" style="margin-top: 20px;">
+                        🔐 Test Admin Login
+                    </button>
+                    <button onclick="goToLogin()" style="margin-top: 20px;">
+                        🚀 Go to Login Page
+                    </button>
+                `;
+            }, 2000);
+        }
+        
+        function testAdminLogin() {
+            window.open('login.html', '_blank');
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        // Auto-run fix on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(autoFix, 1000);
+        });
+    </script>
+</body>
+</html>

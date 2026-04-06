@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+        }
+        button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+        .success-btn {
+            background: #28a745;
+        }
+        .success-btn:hover {
+            background: #218838;
+        }
+        h1 { color: #2c3e50; margin-bottom: 30px; }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Delete Account Options</h1>
+        
+        <div id="status" class="status warning">
+            Choose an option below to manage your accounts
+        </div>
+        
+        <button onclick="deleteCustomerOnly()">
+            🛍️ Delete Customer Account Only
+        </button>
+        
+        <button onclick="deleteAllAccounts()">
+            🗑️ Delete ALL Accounts
+        </button>
+        
+        <button onclick="createFreshAdmin()" class="success-btn">
+            👤 Create Fresh Admin Account
+        </button>
+        
+        <button onclick="goToLogin()" class="success-btn">
+            🔐 Go to Login Page
+        </button>
+        
+        <div id="result" style="margin-top: 30px;"></div>
+    </div>
+
+    <script>
+        function deleteCustomerOnly() {
+            if (confirm('Remove customer account with your email and keep admin account?')) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const adminEmail = 'charlesluhanga77@gmail.com';
+                
+                // Remove customer accounts with admin email, keep only admin account
+                const filteredUsers = users.filter(user => {
+                    if (user.email === adminEmail) {
+                        return user.role === 'admin'; // Keep only admin account
+                    }
+                    return true; // Keep all other users
+                });
+                
+                localStorage.setItem('users', JSON.stringify(filteredUsers));
+                localStorage.removeItem('userSession');
+                
+                showResult('Customer account removed!', 'success');
+            }
+        }
+        
+        function deleteAllAccounts() {
+            if (confirm('⚠️ This will delete ALL user accounts including admin. Are you sure?')) {
+                localStorage.removeItem('users');
+                localStorage.removeItem('userSession');
+                localStorage.removeItem('verificationCode');
+                
+                showResult('All accounts deleted!', 'error');
+            }
+        }
+        
+        function createFreshAdmin() {
+            const adminUser = {
+                id: 'admin_001',
+                name: 'Admin User',
+                email: 'charlesluhanga77@gmail.com',
+                password: 'hashed_password_placeholder',
+                role: 'admin',
+                createdAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('users', JSON.stringify([adminUser]));
+            localStorage.removeItem('userSession');
+            
+            showResult('Fresh admin account created!', 'success');
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            const statusDiv = document.getElementById('status');
+            
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = message;
+            
+            resultDiv.innerHTML = `
+                <div class="status ${type}">
+                    ${type === 'success' ? '✅' : '❌'} ${message}
+                </div>
+                <button onclick="goToLogin()" class="success-btn" style="margin-top: 20px;">
+                    🔐 Go to Login Page
+                </button>
+            `;
+        }
+    </script>
+</body>
+</html>

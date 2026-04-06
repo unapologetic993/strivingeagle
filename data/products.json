@@ -1,0 +1,485 @@
+{
+  "products": [
+    {
+      "id": "m001",
+      "name": "Classic Aviator Glasses",
+      "category": "glasses",
+      "gender": "male",
+      "ageGroup": "adults",
+      "price": 15000,
+      "description": "Timeless aviator style glasses with UV protection. Perfect for any occasion.",
+      "image": "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "m002",
+      "name": "Stud Earrings Set",
+      "category": "earrings",
+      "gender": "male",
+      "ageGroup": "teens",
+      "price": 8000,
+      "description": "Modern stud earrings set with surgical steel posts. Hypoallergenic and stylish.",
+      "image": "https://images.unsplash.com/photo-1611591174239-9a1b7e8c5d7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1611591174239-9a1b7e8c5d7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "m003",
+      "name": "Athletic Socks Pack",
+      "category": "socks",
+      "gender": "male",
+      "ageGroup": "adults",
+      "price": 5000,
+      "description": "Comfortable athletic socks pack of 3. Moisture-wicking and durable.",
+      "image": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "m004",
+      "name": "Baseball Cap",
+      "category": "hats",
+      "gender": "male",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Classic baseball cap with adjustable strap. Perfect for casual wear.",
+      "image": "https://images.unsplash.com/photo-1521369909029-230362e50dca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1521369909029-230362e50dca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "m005",
+      "name": "Winter Beanie",
+      "category": "beanies",
+      "gender": "male",
+      "ageGroup": "adults",
+      "price": 10000,
+      "description": "Warm winter beanie made from soft acrylic. Keeps you cozy in cold weather.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "m006",
+      "name": "Slim Fit Jeans",
+      "category": "jeans",
+      "gender": "male",
+      "ageGroup": "adults",
+      "price": 25000,
+      "description": "Modern slim fit jeans with stretch comfort. Perfect for everyday wear.",
+      "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["28", "30", "32", "34", "36"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "m007",
+      "name": "Athletic Sweatpants",
+      "category": "sweatpants",
+      "gender": "male",
+      "ageGroup": "teens",
+      "price": 18000,
+      "description": "Comfortable athletic sweatpants with elastic waistband. Perfect for workouts or lounging.",
+      "image": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["s", "m", "l", "xl"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "m008",
+      "name": "Denim Jorts",
+      "category": "jorts",
+      "gender": "male",
+      "ageGroup": "teens",
+      "price": 20000,
+      "description": "Stylish denim jorts with modern cut. Perfect for summer casual wear.",
+      "image": "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["28", "30", "32", "34"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "f001",
+      "name": "Cat Eye Glasses",
+      "category": "glasses",
+      "gender": "female",
+      "ageGroup": "adults",
+      "price": 18000,
+      "description": "Elegant cat eye glasses with UV protection. Sophisticated and stylish.",
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "f002",
+      "name": "Hoop Earrings",
+      "category": "earrings",
+      "gender": "female",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Classic hoop earrings with secure clasp. Timeless elegance for any occasion.",
+      "image": "https://images.unsplash.com/photo-1611591174239-9a1b7e8c5d7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1611591174239-9a1b7e8c5d7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "f003",
+      "name": "Fashion Socks Set",
+      "category": "socks",
+      "gender": "female",
+      "ageGroup": "teens",
+      "price": 6000,
+      "description": "Trendy fashion socks pack of 3. Colorful designs with comfortable fit.",
+      "image": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "f004",
+      "name": "Sun Hat",
+      "category": "hats",
+      "gender": "female",
+      "ageGroup": "adults",
+      "price": 15000,
+      "description": "Elegant sun hat with wide brim. Perfect for outdoor activities and beach days.",
+      "image": "https://images.unsplash.com/photo-1521369909029-230362e50dca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1521369909029-230362e50dca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "f005",
+      "name": "Knit Beanie",
+      "category": "beanies",
+      "gender": "female",
+      "ageGroup": "teens",
+      "price": 9000,
+      "description": "Cozy knit beanie with pom-pom detail. Stylish and warm for winter.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "f006",
+      "name": "Skinny Jeans",
+      "category": "jeans",
+      "gender": "female",
+      "ageGroup": "adults",
+      "price": 28000,
+      "description": "Flattering skinny jeans with stretch comfort. Perfect for any body type.",
+      "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["xs", "s", "m", "l", "xl"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "f007",
+      "name": "Yoga Sweatpants",
+      "category": "sweatpants",
+      "gender": "female",
+      "ageGroup": "adults",
+      "price": 20000,
+      "description": "Comfortable yoga sweatpants with high waist. Perfect for workouts or casual wear.",
+      "image": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["xs", "s", "m", "l", "xl"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "f008",
+      "name": "Denim Cutoffs",
+      "category": "jorts",
+      "gender": "female",
+      "ageGroup": "teens",
+      "price": 22000,
+      "description": "Stylish denim cutoffs with distressed details. Perfect for summer fashion.",
+      "image": "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["xs", "s", "m", "l"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "k001",
+      "name": "Kids Sunglasses",
+      "category": "glasses",
+      "gender": "male",
+      "ageGroup": "kids",
+      "price": 8000,
+      "description": "Fun and colorful sunglasses for kids with UV protection. Durable and safe.",
+      "image": "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "k002",
+      "name": "Kids Baseball Cap",
+      "category": "hats",
+      "gender": "male",
+      "ageGroup": "kids",
+      "price": 7000,
+      "description": "Adjustable baseball cap for kids with fun designs. Perfect for outdoor play.",
+      "image": "https://images.unsplash.com/photo-1521369909029-230362e50dca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1521369909029-230362e50dca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "k003",
+      "name": "Kids Jeans",
+      "category": "jeans",
+      "gender": "male",
+      "ageGroup": "kids",
+      "price": 15000,
+      "description": "Comfortable jeans for kids with adjustable waist. Durable for active play.",
+      "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["2-3y", "4-5y", "6-7y", "8-9y", "10-12y"],
+      "isNew": false,
+      "inStock": true
+    },
+    {
+      "id": "b001",
+      "name": "GRIMY VISIONS Beanie - Brown",
+      "category": "beanies",
+      "gender": "unisex",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Brown knitted beanie with 'GRIMY VISIONS' text and yellow star design. Bold psychedelic font style.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "b002",
+      "name": "GRIMY VISIONS Beanie - Blue",
+      "category": "beanies",
+      "gender": "unisex",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Blue knitted beanie with 'GRIMY VISIONS' text and yellow star design. Bold psychedelic font style.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "b003",
+      "name": "GRIMY VISIONS Beanie - Grey",
+      "category": "beanies",
+      "gender": "unisex",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Grey knitted beanie with 'GRIMY VISIONS' text and green star design. Features subtle spiderweb pattern.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "b004",
+      "name": "GRIMY VISIONS Beanie - White",
+      "category": "beanies",
+      "gender": "unisex",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "White knitted beanie with 'GRIMY VISIONS' text and red star design. Features subtle spiderweb pattern.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "b005",
+      "name": "GRIMY VISIONS Beanie - Red",
+      "category": "beanies",
+      "gender": "unisex",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Red knitted beanie with 'GRIMY VISIONS' text and red star design. Bold psychedelic font style.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "b006",
+      "name": "GRIMY VISIONS Beanie - Pink",
+      "category": "beanies",
+      "gender": "unisex",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Pink knitted beanie with 'GRIMY VISIONS' text and blue star design. Bold psychedelic font style.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "b007",
+      "name": "GRIMY VISIONS Beanie - Olive Green",
+      "category": "beanies",
+      "gender": "unisex",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Olive green knitted beanie with 'GRIMY VISIONS' text and red star design. Bold psychedelic font style.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "b008",
+      "name": "GRIMY VISIONS Beanie - Black",
+      "category": "beanies",
+      "gender": "unisex",
+      "ageGroup": "teens",
+      "price": 12000,
+      "description": "Black knitted beanie with 'GRIMY VISIONS' text and red star design. Bold psychedelic font style.",
+      "image": "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1544966503-7e3c4c46c823?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["one-size"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "c001",
+      "name": "Denim Cargo Pants - Light Blue",
+      "category": "jeans",
+      "gender": "male",
+      "ageGroup": "adults",
+      "price": 22000,
+      "description": "Light blue denim cargo pants with tie details on legs and thigh pocket. Perfect for casual wear.",
+      "image": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["s", "m", "l", "xl"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "c002",
+      "name": "Wide-Leg Denim Jeans - Light Blue",
+      "category": "jeans",
+      "gender": "female",
+      "ageGroup": "adults",
+      "price": 40000,
+      "description": "Light blue wide-leg denim jeans with raw hem and classic five-pocket design. Modern minimalist style.",
+      "image": "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["xs", "s", "m", "l", "xl"],
+      "isNew": true,
+      "inStock": true
+    },
+    {
+      "id": "c003",
+      "name": "Wide-Leg Jeans - Male Teens",
+      "category": "jeans",
+      "gender": "male",
+      "ageGroup": "teens",
+      "price": 45000,
+      "description": "Light blue wide-leg denim jeans with modern fit. Perfect for teen fashion with comfortable styling and versatile wear.",
+      "image": "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      "images": [
+        "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      ],
+      "sizes": ["28", "30", "32", "34"],
+      "isNew": true,
+      "inStock": true
+    }
+  ]
+}

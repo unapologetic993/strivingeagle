@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Post Test - Chrome Admin</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📤 Upload Post Test</h1>
+        
+        <div class="test-section">
+            <h3>Upload Post Status</h3>
+            <div id="status" class="debug">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Actions</h3>
+            <button class="test-btn" onclick="checkUploadFunction()">🔍 Check Upload Function</button>
+            <button class="test-btn" onclick="checkFormElements()">📋 Check Form Elements</button>
+            <button class="test-btn" onclick="simulateUpload()">📤 Simulate Upload</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Go to Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function checkUploadFunction() {
+            const status = document.getElementById('status');
+            
+            let statusText = '📤 UPLOAD POST STATUS:\n\n';
+            
+            // Check if saveProduct function exists
+            if (typeof saveProduct === 'function') {
+                statusText += '✅ saveProduct function exists\n';
+            } else {
+                statusText += '❌ saveProduct function NOT found\n';
+            }
+            
+            // Check if addNewProduct function exists
+            if (typeof addNewProduct === 'function') {
+                statusText += '✅ addNewProduct function exists\n';
+            } else {
+                statusText += '❌ addNewProduct function NOT found\n';
+            }
+            
+            // Check if updateProduct function exists
+            if (typeof updateProduct === 'function') {
+                statusText += '✅ updateProduct function exists\n';
+            } else {
+                statusText += '❌ updateProduct function NOT found\n';
+            }
+            
+            // Check if syncToMainWebsite function exists
+            if (typeof syncToMainWebsite === 'function') {
+                statusText += '✅ syncToMainWebsite function exists\n';
+            } else {
+                statusText += '❌ syncToMainWebsite function NOT found\n';
+            }
+            
+            statusText += '\n📋 Expected Upload Flow:\n';
+            statusText += '1. Fill form with product details\n';
+            statusText += '2. Click "Upload Post" button\n';
+            statusText += '3. Form onsubmit triggers saveProduct()\n';
+            statusText += '4. saveProduct checks if editing or adding\n';
+            statusText += '5. Calls addNewProduct() or updateProduct()\n';
+            statusText += '6. Product saved to Chrome admin\n';
+            statusText += '7. Product synced to main website\n';
+            statusText += '8. Form resets and hides\n';
+            
+            status.textContent = statusText;
+        }
+        
+        function checkFormElements() {
+            const status = document.getElementById('status');
+            
+            let statusText = '📋 FORM ELEMENTS CHECK:\n\n';
+            
+            // Check form elements (these would be in Chrome Admin page)
+            const elements = [
+                'product-form',
+                'form-title',
+                'submit-btn',
+                'product-name',
+                'product-price',
+                'product-category',
+                'product-gender',
+                'product-age',
+                'product-sizes',
+                'product-description',
+                'product-image'
+            ];
+            
+            elements.forEach(elementId => {
+                statusText += `${elementId}: ${document.getElementById(elementId) ? '✅ Found' : '❌ Not Found (in Chrome Admin)'}\n`;
+            });
+            
+            statusText += '\n📤 Button Text Check:\n';
+            statusText += 'Default: "Upload Post"\n';
+            statusText += 'Edit Mode: "Update Post"\n';
+            statusText += 'Icon: fas fa-upload\n';
+            
+            statusText += '\n📝 Form Title Check:\n';
+            statusText += 'Default: "Upload Post"\n';
+            statusText += 'Edit Mode: "Edit Post"\n';
+            
+            status.textContent = statusText;
+        }
+        
+        function simulateUpload() {
+            const status = document.getElementById('status');
+            
+            let statusText = '📤 UPLOAD SIMULATION:\n\n';
+            
+            // Check current products
+            const products = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            statusText += `Current Products: ${products.length}\n\n`;
+            
+            statusText += 'To test actual upload:\n';
+            statusText += '1. Go to Chrome Admin\n';
+            statusText += '2. Click "Add New Product"\n';
+            statusText += '3. Fill in the form:\n';
+            statusText += '   - Product Name\n';
+            statusText += '   - Price (MWK)\n';
+            statusText += '   - Category\n';
+            statusText += '   - Gender (male, female, unisex)\n';
+            statusText += '   - Age Group\n';
+            statusText += '   - Sizes\n';
+            statusText += '   - Description\n';
+            statusText += '   - Product Image (optional)\n';
+            statusText += '4. Click "Upload Post"\n';
+            statusText += '5. Product should appear in the list\n';
+            statusText += '6. Product should sync to main website\n\n';
+            
+            statusText += '🔍 Troubleshooting:\n';
+            statusText += '• If button doesn\'t work: Check form onsubmit\n';
+            statusText += '• If product doesn\'t save: Check saveProduct function\n';
+            statusText += '• If product doesn\'t sync: Check syncToMainWebsite\n';
+            statusText += '• If form doesn\'t reset: Check cancelAddProduct\n';
+            
+            status.textContent = statusText;
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkUploadFunction();
+        });
+    </script>
+</body>
+</html>

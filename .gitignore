@@ -1,0 +1,10 @@
+# Ignore Git installer
+git-installer.exe
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore OS files
+Thumbs.db
+.DS_Store

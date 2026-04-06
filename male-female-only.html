@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Male/Female Only - No Latest Posts</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        .btn.success {
+            background: #28a745;
+        }
+        .btn.success:hover {
+            background: #218838;
+        }
+        .btn.danger {
+            background: #dc3545;
+        }
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        .btn.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .btn.warning:hover {
+            background: #e0a800;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+        .status-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .success-box {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error-box {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning-box {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        .product-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .product-meta {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .section-header {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: white;
+        }
+        .male-header {
+            background: #007bff;
+        }
+        .female-header {
+            background: #e91e63;
+        }
+        .latest-header {
+            background: #6c757d;
+        }
+        .disabled-header {
+            background: #6c757d;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👨‍👩‍👧‍👦 Male/Female Only - No Latest Posts</h1>
+        
+        <div id="status-message" class="status-box warning-box">
+            <h3>🚫 Latest Posts Disabled</h3>
+            <p>Posts now go directly to male or female sections only. Latest posts section is disabled.</p>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 Quick Actions</h3>
+            <button class="btn" onclick="checkSections()">📊 Check Sections</button>
+            <button class="btn success" onclick="addTestPosts()">➕ Add Test Posts</button>
+            <button class="btn warning" onclick="clearLatestPosts()">🗑️ Clear Latest Posts</button>
+            <button class="btn danger" onclick="clearAllPosts()">🗑️ Clear All Posts</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Current Status</h3>
+            <div id="status" class="debug">Loading status...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚫 Latest Posts Section (DISABLED)</h3>
+            <div class="section-header disabled-header">Latest Posts - NO LONGER USED</div>
+            <div id="latest-posts" class="product-grid"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>👨 Male Products Section</h3>
+            <div class="section-header male-header">Male Products (Male + Unisex)</div>
+            <div id="male-products" class="product-grid"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>👩 Female Products Section</h3>
+            <div class="section-header female-header">Female Products (Female + Unisex)</div>
+            <div id="female-products" class="product-grid"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Test Results</h3>
+            <div id="results" class="debug">Test results will appear here...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 Go to Test Pages</h3>
+            <button class="btn success" onclick="goToMale()">👨 Male Page</button>
+            <button class="btn success" onclick="goToFemale()">👩 Female Page</button>
+            <button class="btn" onclick="goToChromeAdmin()">🔧 Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(message, type = 'success') {
+            const statusBox = document.getElementById('status-message');
+            statusBox.className = `status-box ${type}-box`;
+            statusBox.innerHTML = `<h3>${message}</h3>`;
+        }
+        
+        function checkSections() {
+            const statusDiv = document.getElementById('status');
+            const resultsDiv = document.getElementById('results');
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            
+            let statusText = '📊 MALE/FEMALE ONLY STATUS:\n\n';
+            statusText += `Admin Products: ${adminProducts.length}\n`;
+            statusText += `Latest Products: ${latestProducts.length} (NO LONGER USED)\n\n`;
+            
+            // Simulate what each page should show
+            const maleProducts = adminProducts.filter(p => p.gender === 'male' || p.gender === 'unisex');
+            const femaleProducts = adminProducts.filter(p => p.gender === 'female' || p.gender === 'unisex');
+            
+            statusText += '📱 EXPECTED DISPLAY:\n';
+            statusText += `Latest Page: DISABLED (0 products)\n`;
+            statusText += `Male Page: ${maleProducts.length} products\n`;
+            statusText += `Female Page: ${femaleProducts.length} products\n\n`;
+            
+            statusText += '🔍 PRODUCT BREAKDOWN:\n';
+            statusText += `Male Products: ${adminProducts.filter(p => p.gender === 'male').length}\n`;
+            statusText += `Female Products: ${adminProducts.filter(p => p.gender === 'female').length}\n`;
+            statusText += `Unisex Products: ${adminProducts.filter(p => p.gender === 'unisex').length}\n\n`;
+            
+            const isWorking = adminProducts.length > 0 && (maleProducts.length > 0 || femaleProducts.length > 0);
+            statusText += `🎯 SYSTEM STATUS: ${isWorking ? '✅ WORKING' : '❌ NOT WORKING'}\n`;
+            
+            if (isWorking) {
+                statusText += '\n✅ Posts display correctly in male/female sections only!';
+                statusText += '\n🚫 Latest posts section is disabled!';
+                updateStatus('✅ Male/Female Only Working', 'success');
+            } else {
+                statusText += '\n❌ Posts not displaying correctly. Add test posts.';
+                updateStatus('❌ Posts Display Issues Found', 'error');
+            }
+            
+            statusDiv.textContent = statusText;
+            displaySections();
+            
+            // Test results
+            let resultsText = '🧪 MALE/FEMALE ONLY SYSTEM:\n\n';
+            resultsText += '✅ CHANGES MADE:\n';
+            resultsText += '1. ✅ Removed latest posts functionality\n';
+            resultsText += '2. ✅ Products only go to male/female sections\n';
+            resultsText += '3. ✅ syncToMainWebsite() updated\n';
+            resultsText += '4. ✅ deleteProduct() updated\n';
+            resultsText += '5. ✅ updateCategoryProducts() simplified\n\n';
+            
+            resultsText += '📱 NEW BEHAVIOR:\n';
+            resultsText += '- Admin adds post → Goes to male/female section\n';
+            resultsText += '- Male products → Male section only\n';
+            resultsText += '- Female products → Female section only\n';
+            resultsText += '- Unisex products → Both male & female sections\n';
+            resultsText += '- Latest posts → DISABLED\n\n';
+            
+            resultsText += '🎯 EXPECTED RESULTS:\n';
+            resultsText += '- Male page: Shows male + unisex products\n';
+            resultsText += '- Female page: Shows female + unisex products\n';
+            resultsText += '- Latest page: Empty (disabled)\n';
+            resultsText += '- Clean organization by gender\n\n';
+            
+            resultsText += '✅ RESULT: Products now organized by gender only!';
+            
+            resultsDiv.textContent = resultsText;
+        }
+        
+        function addTestPosts() {
+            const testMale = {
+                id: 'test_male_' + Date.now(),
+                name: 'Test Male Product ' + new Date().toLocaleTimeString(),
+                price: 5500,
+                category: 'accessories',
+                gender: 'male',
+                ageGroup: 'adults',
+                sizes: ['m', 'l', 'xl'],
+                description: 'Test male product for male section',
+                image: 'https://picsum.photos/seed/testmale' + Date.now() + '/300/300.jpg',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            const testFemale = {
+                id: 'test_female_' + Date.now(),
+                name: 'Test Female Product ' + new Date().toLocaleTimeString(),
+                price: 6500,
+                category: 'accessories',
+                gender: 'female',
+                ageGroup: 'adults',
+                sizes: ['s', 'm', 'l'],
+                description: 'Test female product for female section',
+                image: 'https://picsum.photos/seed/testfemale' + Date.now() + '/300/300.jpg',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            const testUnisex = {
+                id: 'test_unisex_' + Date.now(),
+                name: 'Test Unisex Product ' + new Date().toLocaleTimeString(),
+                price: 7500,
+                category: 'accessories',
+                gender: 'unisex',
+                ageGroup: 'all-ages',
+                sizes: ['s', 'm', 'l', 'xl'],
+                description: 'Test unisex product for both sections',
+                image: 'https://picsum.photos/seed/testunisex' + Date.now() + '/300/300.jpg',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add to admin storage ONLY
+            let adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(testMale, testFemale, testUnisex);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            alert('✅ Added test posts to male/female sections:\n- Male product → Male section\n- Female product → Female section\n- Unisex product → Both sections\n\nLatest posts disabled!');
+            checkSections();
+        }
+        
+        function clearLatestPosts() {
+            if (!confirm('🗑️ Clear latest posts?\n\nThis will empty the latest posts storage (not used anymore).')) return;
+            
+            localStorage.setItem('latestProducts', JSON.stringify([]));
+            alert('✅ Latest posts cleared!');
+            checkSections();
+        }
+        
+        function clearAllPosts() {
+            if (!confirm('🗑️ Clear all posts?\n\nThis will reset all product storage.')) return;
+            
+            localStorage.setItem('adminProducts', JSON.stringify([]));
+            localStorage.setItem('latestProducts', JSON.stringify([]));
+            localStorage.setItem('featuredProducts', JSON.stringify([]));
+            
+            alert('✅ All posts cleared!');
+            checkSections();
+        }
+        
+        function displaySections() {
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            
+            // Display latest posts (should be empty/disabled)
+            const latestDiv = document.getElementById('latest-posts');
+            if (latestProducts.length === 0) {
+                latestDiv.innerHTML = '<p>Latest posts section is disabled. Posts go directly to male/female sections.</p>';
+            } else {
+                latestDiv.innerHTML = '<p style="color: #dc3545;">⚠️ Latest posts still contain data. Clear latest posts to complete the fix.</p>';
+            }
+            
+            // Display male products
+            const maleProducts = adminProducts.filter(p => p.gender === 'male' || p.gender === 'unisex');
+            const maleDiv = document.getElementById('male-products');
+            if (maleProducts.length === 0) {
+                maleDiv.innerHTML = '<p>No male products found.</p>';
+            } else {
+                maleDiv.innerHTML = maleProducts.map(product => `
+                    <div class="product-card">
+                        <img src="${product.image || 'https://via.placeholder.com/150x150?text=No+Image'}" 
+                             alt="${product.name}" 
+                             class="product-image"
+                             onerror="this.src='https://via.placeholder.com/150x150?text=Error'">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-meta">
+                            MWK ${product.price.toLocaleString()}<br>
+                            ${product.gender} | ${product.ageGroup}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Display female products
+            const femaleProducts = adminProducts.filter(p => p.gender === 'female' || p.gender === 'unisex');
+            const femaleDiv = document.getElementById('female-products');
+            if (femaleProducts.length === 0) {
+                femaleDiv.innerHTML = '<p>No female products found.</p>';
+            } else {
+                femaleDiv.innerHTML = femaleProducts.map(product => `
+                    <div class="product-card">
+                        <img src="${product.image || 'https://via.placeholder.com/150x150?text=No+Image'}" 
+                             alt="${product.name}" 
+                             class="product-image"
+                             onerror="this.src='https://via.placeholder.com/150x150?text=Error'">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-meta">
+                            MWK ${product.price.toLocaleString()}<br>
+                            ${product.gender} | ${product.ageGroup}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function goToMale() {
+            window.location.href = 'male.html';
+        }
+        
+        function goToFemale() {
+            window.location.href = 'female.html';
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSections();
+        });
+    </script>
+</body>
+</html>

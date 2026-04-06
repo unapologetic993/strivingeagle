@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Display Debug - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Product Display Debug</h1>
+        
+        <div class="test-section">
+            <h3>Storage Status</h3>
+            <div id="storage-status" class="debug">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Actions</h3>
+            <button class="test-btn" onclick="checkAllStorage()">🔍 Check All Storage</button>
+            <button class="test-btn" onclick="addTestProducts()">➕ Add Test Products</button>
+            <button class="test-btn" onclick="clearAllStorage()">🗑️ Clear All Storage</button>
+            <button class="test-btn" onclick="simulateMalePage()">👨 Simulate Male Page</button>
+            <button class="test-btn" onclick="simulateFemalePage()">👩 Simulate Female Page</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Male Section Simulation</h3>
+            <div id="male-simulation" class="product-grid">No products to display</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Female Section Simulation</h3>
+            <div id="female-simulation" class="product-grid">No products to display</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Latest Section Simulation</h3>
+            <div id="latest-simulation" class="product-grid">No products to display</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToMale()">👨 Go to Male Page</button>
+            <button class="test-btn" onclick="goToFemale()">👩 Go to Female Page</button>
+            <button class="test-btn" onclick="goToHome()">🏠 Go to Home Page</button>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Go to Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function checkAllStorage() {
+            const status = document.getElementById('storage-status');
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            const chromeProducts = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            
+            let statusText = '🔍 STORAGE STATUS:\n\n';
+            statusText += `Admin Products: ${adminProducts.length}\n`;
+            statusText += `Male Products: ${maleProducts.length}\n`;
+            statusText += `Female Products: ${femaleProducts.length}\n`;
+            statusText += `Latest Products: ${latestProducts.length}\n`;
+            statusText += `Chrome Admin Products: ${chromeProducts.length}\n\n`;
+            
+            // Check for products cleared flag
+            const productsCleared = localStorage.getItem('productsCleared');
+            const emptyOverride = localStorage.getItem('emptyProductsOverride');
+            
+            statusText += `System Flags:\n`;
+            statusText += `Products Cleared: ${productsCleared === 'true' ? 'YES' : 'NO'}\n`;
+            statusText += `Empty Override: ${emptyOverride ? 'YES' : 'NO'}\n\n`;
+            
+            // Show product details
+            if (adminProducts.length > 0) {
+                statusText += 'ADMIN PRODUCTS:\n';
+                adminProducts.forEach((product, index) => {
+                    statusText += `${index + 1}. ${product.name} (${product.gender}) - MWK ${product.price.toLocaleString()}\n`;
+                });
+            } else {
+                statusText += 'NO ADMIN PRODUCTS FOUND!\n';
+                statusText += 'This is why products are not showing.\n';
+            }
+            
+            status.textContent = statusText;
+            
+            // Update simulations
+            updateSimulations();
+        }
+        
+        function updateSimulations() {
+            // Simulate male section
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const allProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const validMaleProducts = allProducts.filter(product => 
+                product.gender === 'male' || product.gender === 'unisex'
+            );
+            const combinedMale = [...maleProducts, ...validMaleProducts];
+            const uniqueMale = combinedMale.filter((product, index, self) => 
+                index === self.findIndex(p => p.id === product.id)
+            );
+            
+            const maleDisplay = document.getElementById('male-simulation');
+            if (uniqueMale.length === 0) {
+                maleDisplay.innerHTML = '<p>No products to display</p>';
+            } else {
+                maleDisplay.innerHTML = uniqueMale.map(product => `
+                    <div class="product-card">
+                        <div class="product-name">${product.name}</div>
+                        <div>Price: MWK ${product.price.toLocaleString()}</div>
+                        <div>Gender: ${product.gender}</div>
+                        <div>Category: ${product.category}</div>
+                    </div>
+                `).join('');
+            }
+            
+            // Simulate female section
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            const validFemaleProducts = allProducts.filter(product => 
+                product.gender === 'female' || product.gender === 'unisex'
+            );
+            const combinedFemale = [...femaleProducts, ...validFemaleProducts];
+            const uniqueFemale = combinedFemale.filter((product, index, self) => 
+                index === self.findIndex(p => p.id === product.id)
+            );
+            
+            const femaleDisplay = document.getElementById('female-simulation');
+            if (uniqueFemale.length === 0) {
+                femaleDisplay.innerHTML = '<p>No products to display</p>';
+            } else {
+                femaleDisplay.innerHTML = uniqueFemale.map(product => `
+                    <div class="product-card">
+                        <div class="product-name">${product.name}</div>
+                        <div>Price: MWK ${product.price.toLocaleString()}</div>
+                        <div>Gender: ${product.gender}</div>
+                        <div>Category: ${product.category}</div>
+                    </div>
+                `).join('');
+            }
+            
+            // Simulate latest section
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            const fifteenDaysAgo = new Date();
+            fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+            
+            const validLatestProducts = latestProducts.filter(product => {
+                const addedDate = new Date(product.addedToLatest || product.createdAt);
+                return addedDate > fifteenDaysAgo;
+            });
+            
+            const latestDisplay = document.getElementById('latest-simulation');
+            if (validLatestProducts.length === 0) {
+                latestDisplay.innerHTML = '<p>No products to display</p>';
+            } else {
+                latestDisplay.innerHTML = validLatestProducts.map(product => `
+                    <div class="product-card">
+                        <div class="product-name">${product.name}</div>
+                        <div>Price: MWK ${product.price.toLocaleString()}</div>
+                        <div>Gender: ${product.gender}</div>
+                        <div>Category: ${product.category}</div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function addTestProducts() {
+            const testProducts = [
+                {
+                    id: 'male_test_' + Date.now(),
+                    name: 'Test Male Product',
+                    price: 8000,
+                    category: 'clothing',
+                    gender: 'male',
+                    ageGroup: 'adults',
+                    sizes: ['m', 'l', 'xl'],
+                    description: 'Test male product',
+                    image: 'https://via.placeholder.com/300x300?text=Male',
+                    isNew: true,
+                    createdAt: new Date().toISOString(),
+                    addedToLatest: new Date().toISOString()
+                },
+                {
+                    id: 'female_test_' + (Date.now() + 1),
+                    name: 'Test Female Product',
+                    price: 6000,
+                    category: 'accessories',
+                    gender: 'female',
+                    ageGroup: 'adults',
+                    sizes: ['s', 'm', 'l'],
+                    description: 'Test female product',
+                    image: 'https://via.placeholder.com/300x300?text=Female',
+                    isNew: true,
+                    createdAt: new Date().toISOString(),
+                    addedToLatest: new Date().toISOString()
+                },
+                {
+                    id: 'unisex_test_' + (Date.now() + 2),
+                    name: 'Test Unisex Product',
+                    price: 7000,
+                    category: 'accessories',
+                    gender: 'unisex',
+                    ageGroup: 'adults',
+                    sizes: ['s', 'm', 'l', 'xl'],
+                    description: 'Test unisex product',
+                    image: 'https://via.placeholder.com/300x300?text=Unisex',
+                    isNew: true,
+                    createdAt: new Date().toISOString(),
+                    addedToLatest: new Date().toISOString()
+                }
+            ];
+            
+            // Add to admin products
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            testProducts.forEach(product => adminProducts.push(product));
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            // Add to gender-specific storage
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            
+            testProducts.forEach(product => {
+                if (product.gender === 'male' || product.gender === 'unisex') {
+                    maleProducts.push(product);
+                }
+                if (product.gender === 'female' || product.gender === 'unisex') {
+                    femaleProducts.push(product);
+                }
+                latestProducts.unshift(product);
+            });
+            
+            localStorage.setItem('maleProducts', JSON.stringify(maleProducts));
+            localStorage.setItem('femaleProducts', JSON.stringify(femaleProducts));
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            // Clear any flags that might prevent display
+            localStorage.removeItem('productsCleared');
+            localStorage.removeItem('emptyProductsOverride');
+            
+            alert('✅ Test products added to all storage locations!');
+            checkAllStorage();
+        }
+        
+        function clearAllStorage() {
+            if (confirm('⚠️ Clear all product storage?')) {
+                localStorage.removeItem('adminProducts');
+                localStorage.removeItem('maleProducts');
+                localStorage.removeItem('femaleProducts');
+                localStorage.removeItem('latestProducts');
+                localStorage.removeItem('featuredProducts');
+                localStorage.removeItem('chromeAdminProducts');
+                localStorage.removeItem('productsCleared');
+                localStorage.removeItem('emptyProductsOverride');
+                
+                alert('✅ All product storage cleared!');
+                checkAllStorage();
+            }
+        }
+        
+        function simulateMalePage() {
+            const status = document.getElementById('storage-status');
+            status.textContent = '👨 SIMULATING MALE PAGE:\n\nThis simulates what happens on male.html when script.js loads:\n\n1. loadProducts() called\n2. Checks adminProducts storage\n3. Filters for male + unisex products\n4. Calls displayMaleProducts()\n5. Updates male-products-grid element\n\nCheck the "Male Section Simulation" above to see results.';
+            
+            updateSimulations();
+        }
+        
+        function simulateFemalePage() {
+            const status = document.getElementById('storage-status');
+            status.textContent = '👩 SIMULATING FEMALE PAGE:\n\nThis simulates what happens on female.html when script.js loads:\n\n1. loadProducts() called\n2. Checks adminProducts storage\n3. Filters for female + unisex products\n4. Calls displayFemaleProducts()\n5. Updates female-products-grid element\n\nCheck the "Female Section Simulation" above to see results.';
+            
+            updateSimulations();
+        }
+        
+        function goToMale() {
+            window.location.href = 'male.html';
+        }
+        
+        function goToFemale() {
+            window.location.href = 'female.html';
+        }
+        
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAllStorage();
+        });
+    </script>
+</body>
+</html>

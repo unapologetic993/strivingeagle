@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product Test - Chrome Admin</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .product-list {
+            margin-top: 15px;
+        }
+        .product-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✏️ Edit Product Test</h1>
+        
+        <div class="test-section">
+            <h3>Current Products</h3>
+            <div id="products-display" class="product-list">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Actions</h3>
+            <button class="test-btn" onclick="checkProducts()">🔍 Check Products</button>
+            <button class="test-btn" onclick="addTestProduct()">➕ Add Test Product</button>
+            <button class="test-btn" onclick="simulateEdit()">✏️ Simulate Edit</button>
+            <button class="test-btn" onclick="checkEditFunction()">🔧 Check Edit Function</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Debug Info</h3>
+            <div id="debug" class="debug">Click "Check Products" to see debug info</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Go to Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function checkProducts() {
+            const debug = document.getElementById('debug');
+            const display = document.getElementById('products-display');
+            
+            const products = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            
+            let debugText = '🔍 PRODUCT STATUS:\n\n';
+            debugText += `Total Products: ${products.length}\n\n`;
+            
+            if (products.length === 0) {
+                debugText += 'No products found. Add a test product first.\n';
+                display.innerHTML = '<p>No products to display</p>';
+            } else {
+                display.innerHTML = products.map((product, index) => `
+                    <div class="product-item">
+                        <strong>${index + 1}. ${product.name}</strong><br>
+                        Price: MWK ${product.price.toLocaleString()}<br>
+                        Category: ${product.category} | Gender: ${product.gender}<br>
+                        ID: ${product.id}<br>
+                        <small>Created: ${new Date(product.createdAt).toLocaleString()}</small>
+                    </div>
+                `).join('');
+                
+                products.forEach((product, index) => {
+                    debugText += `${index + 1}. ${product.name}\n`;
+                    debugText += `   ID: ${product.id}\n`;
+                    debugText += `   Price: MWK ${product.price.toLocaleString()}\n`;
+                    debugText += `   Category: ${product.category}\n`;
+                    debugText += `   Gender: ${product.gender}\n`;
+                    debugText += `   Created: ${new Date(product.createdAt).toLocaleString()}\n\n`;
+                });
+            }
+            
+            debug.textContent = debugText;
+        }
+        
+        function addTestProduct() {
+            const testProduct = {
+                id: 'test_' + Date.now(),
+                name: 'Test Product ' + Date.now(),
+                price: 5000,
+                category: 'clothing',
+                gender: 'male',
+                ageGroup: 'adults',
+                sizes: ['m', 'l', 'xl'],
+                description: 'Test product for edit functionality',
+                image: 'https://via.placeholder.com/300x300?text=Test',
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+            
+            const products = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            products.push(testProduct);
+            localStorage.setItem('chromeAdminProducts', JSON.stringify(products));
+            
+            alert('✅ Test product added!');
+            checkProducts();
+        }
+        
+        function simulateEdit() {
+            const products = JSON.parse(localStorage.getItem('chromeAdminProducts') || '[]');
+            
+            if (products.length === 0) {
+                alert('❌ No products to edit. Add a test product first.');
+                return;
+            }
+            
+            const lastProduct = products[products.length - 1];
+            
+            // Simulate what the edit function should do
+            const debug = document.getElementById('debug');
+            let debugText = '✏️ EDIT SIMULATION:\n\n';
+            debugText += `Editing Product: ${lastProduct.name}\n`;
+            debugText += `Product ID: ${lastProduct.id}\n\n`;
+            
+            debugText += 'What should happen:\n';
+            debugText += '1. Form should populate with product data\n';
+            debugText += '2. Form title should change to "Edit Product"\n';
+            debugText += '3. Submit button should change to "Update Product"\n';
+            debugText += '4. Submit button should have data-editing attribute\n\n';
+            
+            debugText += 'To test actual edit:\n';
+            debugText += '1. Go to Chrome Admin\n';
+            debugText += '2. Click the Edit button on any product\n';
+            debugText += '3. Make changes to the form\n';
+            debugText += '4. Click "Update Product"\n';
+            
+            debug.textContent = debugText;
+        }
+        
+        function checkEditFunction() {
+            const debug = document.getElementById('debug');
+            
+            let debugText = '🔧 EDIT FUNCTION CHECK:\n\n';
+            
+            // Check if editProduct function exists
+            if (typeof editProduct === 'function') {
+                debugText += '✅ editProduct function exists\n';
+            } else {
+                debugText += '❌ editProduct function NOT found\n';
+            }
+            
+            // Check if updateProduct function exists
+            if (typeof updateProduct === 'function') {
+                debugText += '✅ updateProduct function exists\n';
+            } else {
+                debugText += '❌ updateProduct function NOT found\n';
+            }
+            
+            // Check if saveProduct function exists
+            if (typeof saveProduct === 'function') {
+                debugText += '✅ saveProduct function exists\n';
+            } else {
+                debugText += '❌ saveProduct function NOT found\n';
+            }
+            
+            // Check if syncUpdatedProduct function exists
+            if (typeof syncUpdatedProduct === 'function') {
+                debugText += '✅ syncUpdatedProduct function exists\n';
+            } else {
+                debugText += '❌ syncUpdatedProduct function NOT found\n';
+            }
+            
+            debugText += '\n📋 Expected Edit Flow:\n';
+            debugText += '1. Click Edit button → editProduct(productId)\n';
+            debugText += '2. Form populates with product data\n';
+            debugText += '3. User makes changes\n';
+            debugText += '4. Click Update → saveProduct()\n';
+            debugText += '5. saveProduct checks data-editing attribute\n';
+            debugText += '6. Calls updateProduct(productId)\n';
+            debugText += '7. Updates product in array\n';
+            debugText += '8. Saves to localStorage\n';
+            debugText += '9. Calls syncUpdatedProduct()\n';
+            debugText += '10. Updates main website storage\n';
+            
+            debug.textContent = debugText;
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkProducts();
+        });
+    </script>
+</body>
+</html>

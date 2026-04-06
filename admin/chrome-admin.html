@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Admin Login - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .login-header {
+            margin-bottom: 30px;
+        }
+        .login-header h1 {
+            color: #667eea;
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+        .login-header p {
+            color: #666;
+            margin: 0;
+        }
+        .form-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+        .dashboard-container {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .admin-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .product-info {
+            flex: 1;
+            margin-left: 1rem;
+        }
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-danger {
+            background: #dc3545;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .btn:hover {
+            background: #764ba2;
+        }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="login-section" class="login-container">
+        <div class="login-header">
+            <h1><i class="fas fa-eagle"></i> Striving Eagle</h1>
+            <p>Admin Login</p>
+        </div>
+        
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login to Admin
+            </button>
+        </form>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="dashboard-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+            <p id="admin-welcome">Welcome, Admin</p>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <div class="admin-section">
+            <h2><i class="fas fa-box"></i> Products Management</h2>
+            
+            <!-- Add Product Button -->
+            <button class="btn" onclick="showAddProductForm()" style="background: #28a745; margin-bottom: 20px;">
+                <i class="fas fa-plus"></i> Add New Product
+            </button>
+            
+            <!-- Add Product Form -->
+            <div id="add-product-form" style="display: none; background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Add New Product</h3>
+                <form id="product-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Product Name *</label>
+                            <input type="text" id="product-name" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Price (MWK) *</label>
+                            <input type="number" id="product-price" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Category *</label>
+                            <select id="product-category" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">Select Category</option>
+                                <option value="glasses">Glasses</option>
+                                <option value="earrings">Earrings</option>
+                                <option value="socks">Socks</option>
+                                <option value="hats">Hats</option>
+                                <option value="beanies">Beanies</option>
+                                <option value="jeans">Jeans</option>
+                                <option value="sweatpants">Sweatpants</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Gender *</label>
+                            <select id="product-gender" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="unisex">Unisex</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Age Group *</label>
+                            <select id="product-age" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">Select Age Group</option>
+                                <option value="kids">Kids</option>
+                                <option value="teens">Teens</option>
+                                <option value="adults">Adults</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Sizes (comma-separated)</label>
+                        <input type="text" id="product-sizes" placeholder="e.g., s, m, l, xl" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description *</label>
+                        <textarea id="product-description" rows="3" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn" style="background: #28a745;">
+                            <i class="fas fa-save"></i> Save Product
+                        </button>
+                        <button type="button" class="btn" onclick="cancelAddProduct()" style="background: #dc3545;">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div id="products-list">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h2><i class="fas fa-shopping-cart"></i> Customer Orders</h2>
+            <div id="orders-list">
+                <!-- Orders will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chrome-Compatible Admin System
+        let products = [];
+        let orders = [];
+        let currentUser = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Chrome Admin System initializing...');
+            
+            // Check if already logged in
+            const session = localStorage.getItem('chromeAdminSession');
+            if (session) {
+                currentUser = JSON.parse(session);
+                showDashboard();
+            } else {
+                showLogin();
+            }
+            
+            // Setup login form
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+            
+            // Setup product form
+            const productForm = document.getElementById('product-form');
+            if (productForm) {
+                productForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveProduct();
+                });
+            }
+        });
+
+        function showLogin() {
+            document.getElementById('login-section').style.display = 'block';
+            document.getElementById('dashboard-section').style.display = 'none';
+        }
+
+        function showDashboard() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('dashboard-section').style.display = 'block';
+            
+            // Update welcome message
+            const welcomeDiv = document.getElementById('admin-welcome');
+            if (welcomeDiv && currentUser) {
+                welcomeDiv.textContent = 'Welcome, ' + currentUser.name;
+            }
+            
+            // Load data
+            loadProducts();
+            loadOrders();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            console.log('Login attempt:', username, password);
+            
+            // Accept any username with correct password
+            if (password === 'ChisomoXCharles08') {
+                // Create session
+                currentUser = {
+                    username: username,
+                    name: username.charAt(0).toUpperCase() + username.slice(1) + ' User',
+                    role: 'admin',
+                    loginTime: new Date().toISOString()
+                };
+                
+                // Save session
+                localStorage.setItem('chromeAdminSession', JSON.stringify(currentUser));
+                
+                // Show success
+                showMessage('success-message', 'Login successful! Welcome, ' + username);
+                
+                // Show dashboard
+                setTimeout(() => {
+                    showDashboard();
+                }, 1000);
+                
+            } else {
+                showMessage('error-message', 'INCORRECT');
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('chromeAdminSession');
+                currentUser = null;
+                showLogin();
+                showMessage('success-message', 'Logged out successfully');
+            }
+        }
+
+        function showMessage(messageId, message) {
+            const messageDiv = document.getElementById(messageId);
+            if (messageDiv) {
+                messageDiv.textContent = message;
+                messageDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function loadProducts() {
+            try {
+                const savedProducts = localStorage.getItem('adminProducts');
+                if (savedProducts) {
+                    products = JSON.parse(savedProducts);
+                } else {
+                    // Create sample products for testing
+                    products = [
+                        {
+                            id: 'prod_001',
+                            name: 'Sample T-Shirt',
+                            price: 15000,
+                            category: 'hats',
+                            gender: 'male',
+                            ageGroup: 'adults',
+                            sizes: ['s', 'm', 'l', 'xl'],
+                            description: 'Sample product for testing',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'prod_002',
+                            name: 'Sample Jeans',
+                            price: 25000,
+                            category: 'jeans',
+                            gender: 'female',
+                            ageGroup: 'adults',
+                            sizes: ['s', 'm', 'l'],
+                            description: 'Sample jeans for testing',
+                            createdAt: new Date().toISOString()
+                        }
+                    ];
+                    localStorage.setItem('adminProducts', JSON.stringify(products));
+                }
+                
+                displayProducts();
+            } catch (error) {
+                console.error('Error loading products:', error);
+                products = [];
+            }
+        }
+
+        function showAddProductForm() {
+            document.getElementById('add-product-form').style.display = 'block';
+            document.getElementById('products-list').style.display = 'none';
+        }
+
+        function cancelAddProduct() {
+            document.getElementById('add-product-form').style.display = 'none';
+            document.getElementById('products-list').style.display = 'block';
+            document.getElementById('product-form').reset();
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('product-name').value;
+            const price = parseFloat(document.getElementById('product-price').value);
+            const category = document.getElementById('product-category').value;
+            const gender = document.getElementById('product-gender').value;
+            const ageGroup = document.getElementById('product-age').value;
+            const sizes = document.getElementById('product-sizes').value.split(',').map(s => s.trim()).filter(s => s);
+            const description = document.getElementById('product-description').value;
+
+            if (!name || !price || !category || !gender || !ageGroup || !description) {
+                showMessage('error-message', 'Please fill in all required fields');
+                return;
+            }
+
+            const newProduct = {
+                id: 'prod_' + Date.now(),
+                name: name,
+                price: price,
+                category: category,
+                gender: gender,
+                ageGroup: ageGroup,
+                sizes: sizes.length > 0 ? sizes : ['one-size'],
+                description: description,
+                isNew: true,
+                createdAt: new Date().toISOString()
+            };
+
+            products.push(newProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(products));
+            
+            showMessage('success-message', 'Product added successfully!');
+            cancelAddProduct();
+            displayProducts();
+        }
+
+        function displayProducts() {
+            const productsList = document.getElementById('products-list');
+            if (!productsList) return;
+            
+            if (products.length === 0) {
+                productsList.innerHTML = '<p>No products found.</p>';
+                return;
+            }
+            
+            productsList.innerHTML = products.map(product => `
+                <div class="product-item">
+                    <div class="product-info">
+                        <strong>${product.name}</strong><br>
+                        <small>${product.category} | ${product.gender} | ${product.ageGroup} | MWK ${product.price.toLocaleString()}</small><br>
+                        <small>Sizes: ${product.sizes ? product.sizes.join(', ') : 'One size'}</small><br>
+                        <small>${product.description}</small>
+                        ${product.isNew ? '<br><span style="color: #28a745; font-weight: bold;">NEW</span>' : ''}
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn" onclick="editProduct('${product.id}')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteProduct('${product.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                products = products.filter(p => p.id !== productId);
+                localStorage.setItem('adminProducts', JSON.stringify(products));
+                displayProducts();
+                showMessage('success-message', 'Product deleted successfully');
+            }
+        }
+
+        function editProduct(productId) {
+            showMessage('success-message', 'Edit functionality coming soon!');
+        }
+
+        function loadOrders() {
+            try {
+                const savedOrders = localStorage.getItem('customerOrders');
+                if (savedOrders) {
+                    orders = JSON.parse(savedOrders);
+                } else {
+                    orders = [];
+                }
+                
+                displayOrders();
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                orders = [];
+            }
+        }
+
+        function displayOrders() {
+            const ordersList = document.getElementById('orders-list');
+            if (!ordersList) return;
+            
+            if (orders.length === 0) {
+                ordersList.innerHTML = '<p>No customer orders found.</p>';
+                return;
+            }
+            
+            ordersList.innerHTML = orders.map(order => `
+                <div class="product-item">
+                    <div class="product-info">
+                        <strong>Order #${order.orderId || 'N/A'}</strong><br>
+                        <small>${order.name || 'Customer'} | MWK ${order.total?.toLocaleString() || '0'}</small><br>
+                        <small>${new Date(order.timestamp || Date.now()).toLocaleDateString()}</small>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn" onclick="viewOrder('${order.id}')">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewOrder(orderId) {
+            showMessage('success-message', 'Order details coming soon!');
+        }
+    </script>
+</body>
+</html>

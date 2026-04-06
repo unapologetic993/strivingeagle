@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Product Fix Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Quick Product Fix</h1>
+        
+        <div class="test-section">
+            <h3>Current Status</h3>
+            <div id="status" class="debug">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Quick Actions</h3>
+            <button class="test-btn" onclick="quickCheck()">🔍 Quick Check</button>
+            <button class="test-btn" onclick="addQuickUnisex()">➕ Add Unisex Product</button>
+            <button class="test-btn" onclick="testMalePage()">👨 Test Male Page</button>
+            <button class="test-btn" onclick="testFemalePage()">👩 Test Female Page</button>
+            <button class="test-btn" onclick="forceFix()">🔧 Force Fix</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Products Preview</h3>
+            <div id="products-preview"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToMale()">👨 Go to Male Page</button>
+            <button class="test-btn" onclick="goToFemale()">👩 Go to Female Page</button>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Go to Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function quickCheck() {
+            const status = document.getElementById('status');
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            
+            let statusText = '🔍 QUICK STATUS CHECK:\n\n';
+            statusText += `Admin Products: ${adminProducts.length}\n`;
+            statusText += `Male Products: ${maleProducts.length}\n`;
+            statusText += `Female Products: ${femaleProducts.length}\n\n`;
+            
+            if (adminProducts.length === 0) {
+                statusText += '❌ NO ADMIN PRODUCTS FOUND!\n';
+                statusText += 'This is why products are not showing.\n';
+                statusText += 'Add products via Chrome Admin first.\n';
+            } else {
+                statusText += '✅ Admin products found:\n';
+                adminProducts.forEach((product, index) => {
+                    statusText += `${index + 1}. ${product.name} (${product.gender})\n`;
+                });
+            }
+            
+            status.textContent = statusText;
+            updatePreview();
+        }
+        
+        function addQuickUnisex() {
+            const unisexProduct = {
+                id: 'unisex_' + Date.now(),
+                name: 'Quick Unisex Product ' + Date.now(),
+                price: 7500,
+                category: 'accessories',
+                gender: 'unisex',
+                ageGroup: 'adults',
+                sizes: ['s', 'm', 'l', 'xl'],
+                description: 'Quick unisex product for testing',
+                image: 'https://via.placeholder.com/300x300?text=Unisex',
+                isNew: true,
+                createdAt: new Date().toISOString(),
+                addedToLatest: new Date().toISOString()
+            };
+            
+            // Add to admin products
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(unisexProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            // Add to male products
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            maleProducts.push(unisexProduct);
+            localStorage.setItem('maleProducts', JSON.stringify(maleProducts));
+            
+            // Add to female products
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            femaleProducts.push(unisexProduct);
+            localStorage.setItem('femaleProducts', JSON.stringify(femaleProducts));
+            
+            // Add to latest products
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            latestProducts.unshift(unisexProduct);
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            // Clear any blocking flags
+            localStorage.removeItem('productsCleared');
+            localStorage.removeItem('emptyProductsOverride');
+            
+            alert('✅ Unisex product added to all sections!');
+            quickCheck();
+        }
+        
+        function testMalePage() {
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            
+            // Simulate male page logic
+            const validMaleProducts = adminProducts.filter(product => 
+                product.gender === 'male' || product.gender === 'unisex'
+            );
+            const combinedProducts = [...maleProducts, ...validMaleProducts];
+            const uniqueProducts = combinedProducts.filter((product, index, self) => 
+                index === self.findIndex(p => p.id === product.id)
+            );
+            
+            const status = document.getElementById('status');
+            status.textContent = `👨 MALE PAGE TEST:\n\nAdmin Products: ${adminProducts.length}\nMale Storage: ${maleProducts.length}\nValid Male+Unisex: ${validMaleProducts.length}\nCombined: ${combinedProducts.length}\nUnique: ${uniqueProducts.length}\n\nProducts that should show:\n${uniqueProducts.map(p => `- ${p.name} (${p.gender})`).join('\n')}`;
+            
+            updatePreview();
+        }
+        
+        function testFemalePage() {
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            
+            // Simulate female page logic
+            const validFemaleProducts = adminProducts.filter(product => 
+                product.gender === 'female' || product.gender === 'unisex'
+            );
+            const combinedProducts = [...femaleProducts, ...validFemaleProducts];
+            const uniqueProducts = combinedProducts.filter((product, index, self) => 
+                index === self.findIndex(p => p.id === product.id)
+            );
+            
+            const status = document.getElementById('status');
+            status.textContent = `👩 FEMALE PAGE TEST:\n\nAdmin Products: ${adminProducts.length}\nFemale Storage: ${femaleProducts.length}\nValid Female+Unisex: ${validFemaleProducts.length}\nCombined: ${combinedProducts.length}\nUnique: ${uniqueProducts.length}\n\nProducts that should show:\n${uniqueProducts.map(p => `- ${p.name} (${p.gender})`).join('\n')}`;
+            
+            updatePreview();
+        }
+        
+        function forceFix() {
+            if (confirm('⚠️ Force fix all product storage? This will clear and reset everything.')) {
+                // Clear all blocking flags
+                localStorage.removeItem('productsCleared');
+                localStorage.removeItem('emptyProductsOverride');
+                
+                // Clear all product storage
+                localStorage.removeItem('adminProducts');
+                localStorage.removeItem('maleProducts');
+                localStorage.removeItem('femaleProducts');
+                localStorage.removeItem('latestProducts');
+                localStorage.removeItem('featuredProducts');
+                localStorage.removeItem('chromeAdminProducts');
+                
+                // Add one test unisex product
+                addQuickUnisex();
+                
+                alert('✅ Force fix completed! Added one test unisex product.');
+            }
+        }
+        
+        function updatePreview() {
+            const preview = document.getElementById('products-preview');
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            
+            if (adminProducts.length === 0) {
+                preview.innerHTML = '<p>No products to preview</p>';
+            } else {
+                preview.innerHTML = adminProducts.map(product => `
+                    <div class="product-card">
+                        <strong>${product.name}</strong><br>
+                        Gender: ${product.gender} | Price: MWK ${product.price.toLocaleString()}<br>
+                        Category: ${product.category} | Age: ${product.ageGroup}<br>
+                        <small>ID: ${product.id}</small>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function goToMale() {
+            window.location.href = 'male.html';
+        }
+        
+        function goToFemale() {
+            window.location.href = 'female.html';
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            quickCheck();
+        });
+    </script>
+</body>
+</html>

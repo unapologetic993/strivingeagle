@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #ffffff;
+            color: #333333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #dee2e6;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        h1, h2 { color: #2c3e50; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦅 Striving Eagle - Simple Test</h1>
+        
+        <div class="card">
+            <h2>🔧 Glitch Diagnosis</h2>
+            <p>This page uses minimal CSS and no JavaScript animations to test if the glitching continues.</p>
+            
+            <div class="status success">
+                ✅ No CSS animations or transitions
+            </div>
+            <div class="status success">
+                ✅ No complex JavaScript
+            </div>
+            <div class="status success">
+                ✅ Simple, clean styling
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🔗 Test Links</h2>
+            <p>If this page works fine, the issue is likely in the CSS animations or JavaScript complexity.</p>
+            
+            <button onclick="window.open('index.html', '_blank')">
+                🏠 Open Main Site (Full Features)
+            </button>
+            <button onclick="window.open('login.html', '_blank')">
+                🔐 Open Admin Login
+            </button>
+            <button onclick="window.open('admin/dashboard.html', '_blank')">
+                ⚙️ Open Admin Dashboard
+            </button>
+            <button onclick="window.open('debug.html', '_blank')">
+                🔧 Open Debug Page
+            </button>
+        </div>
+        
+        <div class="card">
+            <h2>📋 Quick Test</h2>
+            <p><strong>Test Results:</strong></p>
+            <ul>
+                <li>If this page displays correctly → Issue is in CSS/JS complexity</li>
+                <li>If this page still glitches → Issue is browser/system related</li>
+                <li>If admin dashboard works from here → Path issue is fixed</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

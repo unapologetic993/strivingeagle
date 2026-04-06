@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Access - Striving Eagle</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/auth.js"></script>
+</head>
+<body>
+    <script>
+        // Check if user is already logged in as admin
+        document.addEventListener('DOMContentLoaded', function() {
+            if (auth.isLoggedIn() && auth.isAdmin()) {
+                // Already logged in as admin, redirect to dashboard
+                window.location.href = 'admin/dashboard.html';
+            } else {
+                // Not logged in, redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+        <div style="text-align: center; color: white;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+            <p>Redirecting to admin access...</p>
+        </div>
+    </div>
+</body>
+</html>

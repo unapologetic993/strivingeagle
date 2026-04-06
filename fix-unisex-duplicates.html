@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unisex Duplicate Fix Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .test-btn.danger {
+            background: #dc3545;
+        }
+        .test-btn.danger:hover {
+            background: #c82333;
+        }
+        .debug {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 10px;
+        }
+        .duplicate {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        .success {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👫 Unisex Duplicate Fix</h1>
+        
+        <div class="test-section">
+            <h3>Duplicate Status</h3>
+            <div id="duplicate-status" class="debug">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Fix Actions</h3>
+            <button class="test-btn" onclick="checkDuplicates()">🔍 Check for Duplicates</button>
+            <button class="test-btn" onclick="addTestUnisex()">➕ Add Test Unisex</button>
+            <button class="test-btn danger" onclick="cleanDuplicates()">🧹 Clean Duplicates</button>
+            <button class="test-btn danger" onclick="resetUnisex()">🔄 Reset Unisex Storage</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Current Products</h3>
+            <div id="products-display"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Results</h3>
+            <div id="test-results" class="debug">Test results will appear here...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <button class="test-btn" onclick="goToMale()">👨 Test Male Page</button>
+            <button class="test-btn" onclick="goToFemale()">👩 Test Female Page</button>
+            <button class="test-btn" onclick="goToChromeAdmin()">🔧 Go to Chrome Admin</button>
+        </div>
+    </div>
+
+    <script>
+        function checkDuplicates() {
+            const status = document.getElementById('duplicate-status');
+            const results = document.getElementById('test-results');
+            
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            
+            let statusText = '🔍 DUPLICATE CHECK:\n\n';
+            let duplicateFound = false;
+            
+            // Check for unisex products in male storage (shouldn't exist)
+            const unisexInMale = maleProducts.filter(p => p.gender === 'unisex');
+            if (unisexInMale.length > 0) {
+                duplicateFound = true;
+                statusText += `❌ FOUND ${unisexInMale.length} unisex products in male storage (should be 0)\n`;
+            } else {
+                statusText += `✅ No unisex products in male storage\n`;
+            }
+            
+            // Check for unisex products in female storage (shouldn't exist)
+            const unisexInFemale = femaleProducts.filter(p => p.gender === 'unisex');
+            if (unisexInFemale.length > 0) {
+                duplicateFound = true;
+                statusText += `❌ FOUND ${unisexInFemale.length} unisex products in female storage (should be 0)\n`;
+            } else {
+                statusText += `✅ No unisex products in female storage\n`;
+            }
+            
+            // Check unisex products in admin storage (should exist)
+            const unisexInAdmin = adminProducts.filter(p => p.gender === 'unisex');
+            statusText += `✅ ${unisexInAdmin.length} unisex products in admin storage (correct)\n\n`;
+            
+            // Simulate what would be displayed
+            const maleDisplay = adminProducts.filter(p => p.gender === 'male' || p.gender === 'unisex');
+            const femaleDisplay = adminProducts.filter(p => p.gender === 'female' || p.gender === 'unisex');
+            
+            statusText += `DISPLAY SIMULATION:\n`;
+            statusText += `Male page would show: ${maleDisplay.length} products\n`;
+            statusText += `Female page would show: ${femaleDisplay.length} products\n`;
+            
+            if (duplicateFound) {
+                statusText += `\n⚠️ DUPLICATES FOUND! Use "Clean Duplicates" button to fix.`;
+            } else {
+                statusText += `\n✅ NO DUPLICATES FOUND! System is working correctly.`;
+            }
+            
+            status.textContent = statusText;
+            results.textContent = duplicateFound ? '❌ Duplicates detected. Fix required.' : '✅ No duplicates found. System is correct.';
+            
+            updateProductsDisplay();
+        }
+        
+        function addTestUnisex() {
+            const unisexProduct = {
+                id: 'unisex_test_' + Date.now(),
+                name: 'Test Unisex Product ' + new Date().toLocaleTimeString(),
+                price: 7500,
+                category: 'accessories',
+                gender: 'unisex',
+                ageGroup: 'adults',
+                sizes: ['s', 'm', 'l', 'xl'],
+                description: 'Test unisex product for duplicate checking',
+                image: 'https://via.placeholder.com/300x300?text=Unisex',
+                isNew: true,
+                createdAt: new Date().toISOString(),
+                addedToLatest: new Date().toISOString()
+            };
+            
+            // Add to admin storage only (correct way)
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            adminProducts.push(unisexProduct);
+            localStorage.setItem('adminProducts', JSON.stringify(adminProducts));
+            
+            // Add to latest storage
+            const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]');
+            latestProducts.unshift(unisexProduct);
+            localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+            
+            alert('✅ Test unisex product added to admin storage only!');
+            checkDuplicates();
+        }
+        
+        function cleanDuplicates() {
+            if (confirm('⚠️ Clean all unisex duplicates from gender-specific storage?')) {
+                const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+                const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+                
+                // Remove unisex products from male storage
+                const cleanedMale = maleProducts.filter(p => p.gender !== 'unisex');
+                localStorage.setItem('maleProducts', JSON.stringify(cleanedMale));
+                
+                // Remove unisex products from female storage
+                const cleanedFemale = femaleProducts.filter(p => p.gender !== 'unisex');
+                localStorage.setItem('femaleProducts', JSON.stringify(cleanedFemale));
+                
+                const removedFromMale = maleProducts.length - cleanedMale.length;
+                const removedFromFemale = femaleProducts.length - cleanedFemale.length;
+                
+                alert(`✅ Cleaned ${removedFromMale} unisex products from male storage and ${removedFromFemale} from female storage!`);
+                checkDuplicates();
+            }
+        }
+        
+        function resetUnisex() {
+            if (confirm('⚠️ Reset all unisex product storage? This will clear all unisex products and re-add them correctly.')) {
+                const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+                const unisexProducts = adminProducts.filter(p => p.gender === 'unisex');
+                
+                // Clear unisex from all storage
+                const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]').filter(p => p.gender !== 'unisex');
+                const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]').filter(p => p.gender !== 'unisex');
+                const latestProducts = JSON.parse(localStorage.getItem('latestProducts') || '[]').filter(p => p.gender !== 'unisex');
+                
+                localStorage.setItem('maleProducts', JSON.stringify(maleProducts));
+                localStorage.setItem('femaleProducts', JSON.stringify(femaleProducts));
+                localStorage.setItem('latestProducts', JSON.stringify(latestProducts));
+                
+                // Keep unisex products only in admin storage
+                const nonUnisexAdmin = adminProducts.filter(p => p.gender !== 'unisex');
+                localStorage.setItem('adminProducts', JSON.stringify([...nonUnisexAdmin, ...unisexProducts]));
+                
+                alert(`✅ Reset complete! ${unisexProducts.length} unisex products now only in admin storage.`);
+                checkDuplicates();
+            }
+        }
+        
+        function updateProductsDisplay() {
+            const display = document.getElementById('products-display');
+            const adminProducts = JSON.parse(localStorage.getItem('adminProducts') || '[]');
+            const maleProducts = JSON.parse(localStorage.getItem('maleProducts') || '[]');
+            const femaleProducts = JSON.parse(localStorage.getItem('femaleProducts') || '[]');
+            
+            let html = '';
+            
+            // Show admin products
+            html += '<h4>Admin Storage (Correct Location)</h4>';
+            if (adminProducts.length === 0) {
+                html += '<p>No products in admin storage</p>';
+            } else {
+                adminProducts.forEach(product => {
+                    html += `<div class="product-card ${product.gender === 'unisex' ? 'success' : ''}">
+                        <strong>${product.name}</strong><br>
+                        Gender: ${product.gender} | Price: MWK ${product.price.toLocaleString()}<br>
+                        ${product.gender === 'unisex' ? '✅ Correctly stored in admin only' : '✅ Gender-specific product'}
+                    </div>`;
+                });
+            }
+            
+            // Show male storage (should have no unisex)
+            html += '<h4>Male Storage (Should have NO unisex)</h4>';
+            if (maleProducts.length === 0) {
+                html += '<p>No products in male storage</p>';
+            } else {
+                maleProducts.forEach(product => {
+                    html += `<div class="product-card ${product.gender === 'unisex' ? 'duplicate' : ''}">
+                        <strong>${product.name}</strong><br>
+                        Gender: ${product.gender} | Price: MWK ${product.price.toLocaleString()}<br>
+                        ${product.gender === 'unisex' ? '❌ DUPLICATE! Should not be here!' : '✅ Correct male product'}
+                    </div>`;
+                });
+            }
+            
+            // Show female storage (should have no unisex)
+            html += '<h4>Female Storage (Should have NO unisex)</h4>';
+            if (femaleProducts.length === 0) {
+                html += '<p>No products in female storage</p>';
+            } else {
+                femaleProducts.forEach(product => {
+                    html += `<div class="product-card ${product.gender === 'unisex' ? 'duplicate' : ''}">
+                        <strong>${product.name}</strong><br>
+                        Gender: ${product.gender} | Price: MWK ${product.price.toLocaleString()}<br>
+                        ${product.gender === 'unisex' ? '❌ DUPLICATE! Should not be here!' : '✅ Correct female product'}
+                    </div>`;
+                });
+            }
+            
+            display.innerHTML = html;
+        }
+        
+        function goToMale() {
+            window.location.href = 'male.html';
+        }
+        
+        function goToFemale() {
+            window.location.href = 'female.html';
+        }
+        
+        function goToChromeAdmin() {
+            window.location.href = 'admin/chrome-admin-new.html';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkDuplicates();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix Admin Account - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-lg { padding: 15px 30px; font-size: 18px; }
+        h1, h2 { color: #2c3e50; }
+        .step {
+            background: #e8f5e8;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        .step-number {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .user-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        .user-item {
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-item.admin {
+            border-left: 4px solid #28a745;
+        }
+        .user-item.customer {
+            border-left: 4px solid #007bff;
+        }
+        .role-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        .role-badge.admin { background: #28a745; }
+        .role-badge.customer { background: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Fix Admin Account - Striving Eagle</h1>
+        
+        <div class="card">
+            <h2>🔍 Problem Identified</h2>
+            <div class="status error">
+                <strong>Issue:</strong> You have both a customer AND admin account with the same email<br>
+                <strong>Cause:</strong> System finds customer account first and logs you in as customer<br>
+                <strong>Solution:</strong> Remove customer account, keep only admin account
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>👥 Current Accounts</h2>
+            <div id="user-list">
+                Loading user accounts...
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🛠️ Fix Options</h2>
+            <button onclick="removeDuplicateCustomer()" class="btn-danger btn-lg">
+                🗑️ Remove Customer Account (Keep Admin Only)
+            </button>
+            <button onclick="createFreshAdmin()" class="btn-success">
+                🔄 Create Fresh Admin Account
+            </button>
+            <button onclick="checkAccounts()" class="btn-success">
+                📊 Check Current Accounts
+            </button>
+            <button onclick="testAdminLogin()" class="btn-success">
+                🔐 Test Admin Login
+            </button>
+            
+            <div id="fix-result" style="margin-top: 20px;">
+                <!-- Fix results will appear here -->
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📊 Status</h2>
+            <div id="status-info">
+                Checking account status...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user accounts
+        function loadUserAccounts() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userListDiv = document.getElementById('user-list');
+            
+            if (users.length === 0) {
+                userListDiv.innerHTML = '<div class="status warning">No user accounts found</div>';
+                return;
+            }
+            
+            const adminEmail = 'charlesluhanga77@gmail.com';
+            const duplicateAccounts = users.filter(u => u.email === adminEmail);
+            
+            let html = '<div class="user-list">';
+            html += `<h3>📋 All Users (${users.length} total)</h3>`;
+            
+            users.forEach(user => {
+                const isDuplicate = user.email === adminEmail;
+                html += `
+                    <div class="user-item ${user.role}">
+                        <div>
+                            <strong>${user.email}</strong>
+                            <span class="role-badge ${user.role}">${user.role.toUpperCase()}</span>
+                            ${isDuplicate ? '<span style="color: #e74c3c; margin-left: 10px;">⚠️ DUPLICATE EMAIL</span>' : ''}
+                        </div>
+                        <div>
+                            <small>ID: ${user.id}</small>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (duplicateAccounts.length > 1) {
+                html += `<div class="status error" style="margin-top: 10px;">
+                    ⚠️ Found ${duplicateAccounts.length} accounts with email ${adminEmail}<br>
+                    This is causing the login redirect issue!
+                </div>`;
+            }
+            
+            html += '</div>';
+            userListDiv.innerHTML = html;
+        }
+        
+        // Remove duplicate customer account
+        function removeDuplicateCustomer() {
+            const resultDiv = document.getElementById('fix-result');
+            resultDiv.innerHTML = '<div class="status warning">🔄 Removing customer account...</div>';
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const adminEmail = 'charlesluhanga77@gmail.com';
+            
+            // Filter out customer accounts with admin email, keep only admin account
+            const filteredUsers = users.filter(user => {
+                if (user.email === adminEmail) {
+                    return user.role === 'admin'; // Keep only admin account
+                }
+                return true; // Keep all other users
+            });
+            
+            // Save back to localStorage
+            localStorage.setItem('users', JSON.stringify(filteredUsers));
+            
+            // Clear any existing session
+            localStorage.removeItem('userSession');
+            
+            resultDiv.innerHTML = `
+                <div class="status success">
+                    ✅ Customer account removed successfully!<br>
+                    📊 Removed ${users.length - filteredUsers.length} duplicate accounts<br>
+                    👤 Admin account preserved<br>
+                    🔐 Session cleared - try logging in again
+                </div>
+            `;
+            
+            loadUserAccounts();
+            updateStatus();
+        }
+        
+        // Create fresh admin account
+        function createFreshAdmin() {
+            const resultDiv = document.getElementById('fix-result');
+            resultDiv.innerHTML = '<div class="status warning">🔄 Creating fresh admin account...</div>';
+            
+            // Clear all users
+            localStorage.removeItem('users');
+            localStorage.removeItem('userSession');
+            
+            // Create fresh admin user
+            const adminUser = {
+                id: 'admin_001',
+                name: 'Admin User',
+                email: 'charlesluhanga77@gmail.com',
+                password: 'hashed_password_placeholder', // Will be set by auth.js
+                role: 'admin',
+                createdAt: new Date().toISOString()
+            };
+            
+            // Save admin user
+            localStorage.setItem('users', JSON.stringify([adminUser]));
+            
+            resultDiv.innerHTML = `
+                <div class="status success">
+                    ✅ Fresh admin account created!<br>
+                    👤 Email: charlesluhanga77@gmail.com<br>
+                    🔐 Password: ChisomoXCharles08<br>
+                    🎭 Role: admin<br>
+                    🔐 Session cleared - try logging in again
+                </div>
+            `;
+            
+            loadUserAccounts();
+            updateStatus();
+        }
+        
+        // Test admin login
+        async function testAdminLogin() {
+            const resultDiv = document.getElementById('fix-result');
+            resultDiv.innerHTML = '<div class="status warning">🔄 Testing admin login...</div>';
+            
+            try {
+                // Load auth system
+                if (typeof auth === 'undefined') {
+                    const script = document.createElement('script');
+                    script.src = 'js/auth.js';
+                    document.head.appendChild(script);
+                    await new Promise(resolve => script.onload = resolve);
+                }
+                
+                // Clear session first
+                auth.logout();
+                
+                // Test login
+                const result = await auth.login('charlesluhanga77@gmail.com', 'ChisomoXCharles08');
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="status success">
+                            ✅ Admin login successful!<br>
+                            🎯 Role: ${auth.currentUser?.role}<br>
+                            📧 Email: ${auth.currentUser?.email}<br>
+                            🚀 Should redirect to admin dashboard
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="status error">
+                            ❌ Login failed: ${result.error}<br>
+                            🔄 Try removing duplicates first
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+            }
+            
+            updateStatus();
+        }
+        
+        // Check accounts
+        function checkAccounts() {
+            loadUserAccounts();
+            updateStatus();
+        }
+        
+        // Update status
+        function updateStatus() {
+            const statusDiv = document.getElementById('status-info');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const session = localStorage.getItem('userSession');
+            const adminEmail = 'charlesluhanga77@gmail.com';
+            
+            const adminAccounts = users.filter(u => u.email === adminEmail && u.role === 'admin');
+            const customerAccounts = users.filter(u => u.email === adminEmail && u.role === 'customer');
+            
+            let html = '<div class="status success">';
+            html += `<strong>👥 Total Users:</strong> ${users.length}<br>`;
+            html += `<strong>👤 Admin Accounts:</strong> ${adminAccounts.length}<br>`;
+            html += `<strong>🛍️ Customer Accounts:</strong> ${customerAccounts.length}<br>`;
+            html += `<strong>🔐 Active Session:</strong> ${session ? 'Yes' : 'No'}<br>`;
+            
+            if (customerAccounts.length > 0) {
+                html += `<br><strong>⚠️ Problem:</strong> ${customerAccounts.length} customer accounts with admin email found`;
+            } else if (adminAccounts.length === 1) {
+                html += `<br><strong>✅ Status:</strong> Admin account is unique and ready`;
+            }
+            
+            html += '</div>';
+            statusDiv.innerHTML = html;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserAccounts();
+            updateStatus();
+        });
+    </script>
+</body>
+</html>

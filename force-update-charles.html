@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force Update Admin to Charles - Striving Eagle</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        .force-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 25px 50px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        .force-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        h1 { color: #dc3545; margin-bottom: 30px; }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .current-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #dc3545;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Force Update Admin to Charles</h1>
+        
+        <div id="current-info" class="current-info">
+            <h3>📊 Current Status:</h3>
+            <p>Checking current admin accounts...</p>
+        </div>
+        
+        <button onclick="forceUpdateToCharles()" class="force-btn">
+            🔥 FORCE UPDATE TO "CHARLES"
+        </button>
+        
+        <div id="result" style="margin-top: 30px;"></div>
+    </div>
+
+    <script>
+        function forceUpdateToCharles() {
+            console.log('🔥 Force updating admin to Charles...');
+            
+            // Clear ALL existing users first
+            localStorage.removeItem('users');
+            localStorage.removeItem('userSession');
+            localStorage.removeItem('verificationCode');
+            
+            // Create new admin account with username "Charles"
+            const adminUser = {
+                id: 'admin_001',
+                name: 'Admin User',
+                email: 'Charles',
+                password: 'hashed_password_placeholder',
+                role: 'admin',
+                createdAt: new Date().toISOString()
+            };
+            
+            // Save the new admin account
+            localStorage.setItem('users', JSON.stringify([adminUser]));
+            
+            console.log('✅ Admin account created with username: Charles');
+            
+            // Show success
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <div class="status success">
+                    ✅ SUCCESS! Admin username updated to "Charles"<br>
+                    🔑 Username: Charles<br>
+                    🔐 Password: ChisomoXCharles08<br>
+                    🎭 Role: admin
+                </div>
+                <div style="margin-top: 20px;">
+                    <button onclick="goToLogin()" style="background: #28a745; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                        🔐 Go Test Login Now
+                    </button>
+                </div>
+            `;
+            
+            // Update current info
+            updateCurrentInfo();
+        }
+        
+        function updateCurrentInfo() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const adminAccounts = users.filter(u => u.role === 'admin');
+            const infoDiv = document.getElementById('current-info');
+            
+            if (adminAccounts.length === 0) {
+                infoDiv.innerHTML = `
+                    <h3>📊 Current Status:</h3>
+                    <p>❌ No admin accounts found</p>
+                `;
+            } else {
+                infoDiv.innerHTML = `
+                    <h3>📊 Current Status:</h3>
+                    <p><strong>Total Admin Accounts:</strong> ${adminAccounts.length}</p>
+                    <p><strong>Admin Username:</strong> ${adminAccounts[0].email}</p>
+                    <p><strong>Admin Role:</strong> ${adminAccounts[0].role}</p>
+                    <p><strong>Status:</strong> ${adminAccounts[0].email === 'Charles' ? '✅ Updated to Charles' : '⚠️ Not Charles yet'}</p>
+                `;
+            }
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        // Auto-check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentInfo();
+        });
+    </script>
+</body>
+</html>

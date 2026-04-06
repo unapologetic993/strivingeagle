@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Striving Eagle</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1><i class="fas fa-eagle"></i> Striving Eagle</h1>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="male.html" class="nav-link">Male</a>
+                <a href="female.html" class="nav-link">Female</a>
+                <a href="latest.html" class="nav-link">Latest Posts</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="login.html" class="nav-link" id="admin-link">Admin</a>
+            </div>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search products...">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <button class="cart-btn" id="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Details Section -->
+    <section class="product-details">
+        <div class="container">
+            <div class="product-container">
+                <div class="product-images">
+                    <div class="main-image">
+                        <img id="main-product-image" src="" alt="Product Image">
+                    </div>
+                    <div class="thumbnail-images" id="thumbnail-images">
+                        <!-- Thumbnails will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <div class="product-badges" id="product-badges">
+                        <!-- Badges will be loaded here -->
+                    </div>
+                    
+                    <h1 id="product-name">Product Name</h1>
+                    
+                    <div class="product-price">
+                        <span class="current-price">MWK <span id="product-price">0</span></span>
+                    </div>
+                    
+                    <div class="product-meta">
+                        <span class="product-category" id="product-category">Category</span>
+                        <span class="product-gender" id="product-gender">Gender</span>
+                        <span class="product-age" id="product-age">Age Group</span>
+                    </div>
+                    
+                    <div class="product-description">
+                        <h3>Description</h3>
+                        <p id="product-description">Product description will appear here.</p>
+                    </div>
+                    
+                    <div class="product-options">
+                        <div class="size-selector">
+                            <label for="size-select">Size:</label>
+                            <select id="size-select" required>
+                                <option value="">Select Size</option>
+                                <!-- Sizes will be loaded here -->
+                            </select>
+                        </div>
+                        
+                        <div class="quantity-selector">
+                            <label for="quantity-select">Quantity:</label>
+                            <div class="quantity-controls">
+                                <button id="quantity-decrease">-</button>
+                                <input type="number" id="quantity-select" value="1" min="1" max="10">
+                                <button id="quantity-increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="btn btn-primary" id="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Add to Cart
+                        </button>
+                        <a href="https://wa.me/26599921219?text=Hi%20Striving%20Eagle!%20I%20want%20to%20buy%20this%20product.%20Please%20help%20me%20with%20the%20ordering%20process." target="_blank" class="btn btn-secondary">
+                            <i class="fas fa-bolt"></i>
+                            Buy Now
+                        </a>
+                    </div>
+                    
+                    <div class="product-features">
+                        <div class="feature">
+                            <i class="fas fa-truck"></i>
+                            <span>Free delivery in Malawi</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Quality guaranteed</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-undo"></i>
+                            <span>Easy returns</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products Section -->
+    <section class="related-products">
+        <div class="container">
+            <h2>Related Products</h2>
+            <div class="product-grid" id="related-products-grid">
+                <!-- Related products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-eagle"></i> Striving Eagle</h3>
+                    <p>Fly Higher in Style — Trendy Fashion & Accessories in Malawi</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="male.html">Male Collection</a></li>
+                        <li><a href="female.html">Female Collection</a></li>
+                        <li><a href="latest.html">Latest Posts</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Delivery Info</h4>
+                    <p>We deliver across Malawi. Fast and reliable delivery service available.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Striving Eagle. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Shopping Cart</h3>
+                <button class="close-cart" id="close-cart">&times;</button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be displayed here -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: MWK <span id="cart-total">0</span></strong>
+                </div>
+                <button class="btn btn-primary" id="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkout-modal">
+        <div class="checkout-content">
+            <div class="checkout-header">
+                <h3>Checkout</h3>
+                <button class="close-checkout" id="close-checkout">&times;</button>
+            </div>
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label for="checkout-name">Full Name *</label>
+                    <input type="text" id="checkout-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkout-phone">Phone Number *</label>
+                    <input type="tel" id="checkout-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkout-location">Delivery Location *</label>
+                    <select id="checkout-location" required>
+                        <option value="">Select delivery area</option>
+                        <option value="lilongwe-city">Lilongwe City</option>
+                        <option value="lilongwe-rural">Lilongwe Rural</option>
+                        <option value="blantyre">Blantyre</option>
+                        <option value="mzuzu">Mzuzu</option>
+                        <option value="zomba">Zomba</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="checkout-address">Delivery Address</label>
+                    <textarea id="checkout-address" rows="2"></textarea>
+                </div>
+                <div class="checkout-summary">
+                    <h4>Order Summary</h4>
+                    <div id="checkout-items"></div>
+                    <div class="checkout-total">
+                        <strong>Total: MWK <span id="checkout-total">0</span></strong>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
