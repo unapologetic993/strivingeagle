@@ -138,7 +138,7 @@ function contactSupport(orderId) {
     const order = customerOrders.find(o => o.id === orderId);
     if (order) {
         const message = `Hi, I need help with my order #${orderId}. Please assist me.`;
-        const whatsappUrl = `https://wa.me/26599921219?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/265999921219?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     }
 }
