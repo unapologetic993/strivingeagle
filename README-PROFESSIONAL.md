@@ -138,8 +138,8 @@ We welcome contributions to improve Striving Eagle! Here's how you can help:
 ## 📞 Contact Information
 
 ### **Customer Support**
-- **Phone**: 0999921219 | 0883 31 07 09
-- **WhatsApp**: [0999921219](https://wa.me/26599921219) | [0883 31 07 09](https://wa.me/265883310709)
+- **Phone**: 0999 92 12 19 | 0883 31 07 09
+- **WhatsApp**: [0999 92 12 19](https://wa.me/26599921219) | [0883 31 07 09](https://wa.me/265883310709)
 - **Email**: Contact through website form
 - **Hours**: Monday - Saturday, 8AM - 6PM
 

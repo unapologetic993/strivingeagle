@@ -166,8 +166,8 @@ This is a static website that runs directly in the browser. No server setup or b
 
 ## Contact Information
 
-- **Phone**: 0999921219 | 0883 31 07 09
-- **WhatsApp**: [0999921219](https://wa.me/26599921219) | [0883 31 07 09](https://wa.me/265883310709)
+- **Phone**: 0999 92 12 19 | 0883 31 07 09
+- **WhatsApp**: [0999 92 12 19](https://wa.me/26599921219) | [0883 31 07 09](https://wa.me/265883310709)
 - **Delivery**: Across Malawi
 
 ## Future Enhancements
