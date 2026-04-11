@@ -26,31 +26,44 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeEventListeners();
 });
 
-// Load products from localStorage or JSON file
+// Load products from JSON file and merge with localStorage admin products
 async function loadProducts() {
     try {
-        // Try to load from products.json first (for server environment)
+        // Load base products from JSON file first
+        let baseProducts = [];
         try {
-            const response = await fetch('../data/products.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            const response = await fetch('data/products.json');
             const data = await response.json();
-            products = data.products || [];
-            console.log('Loaded products from JSON file:', products.length, 'products');
+            baseProducts = data.products || [];
+            console.log('Loaded base products from JSON file:', baseProducts.length, 'products');
         } catch (fetchError) {
-            console.warn('Fetch error, using localStorage fallback:', fetchError.message);
-            // Fallback to localStorage (for file:// protocol)
-            const savedProducts = localStorage.getItem('adminProducts');
-            if (savedProducts) {
-                products = JSON.parse(savedProducts);
-                console.log('Loaded products from localStorage:', products.length, 'products');
-            } else {
-                // Create empty products array if nothing found
-                products = [];
-                console.log('No products found, using empty array');
+            console.warn('Could not load base products:', fetchError.message);
+            baseProducts = [];
+        }
+        
+        // Get admin-added products from centralized file or localStorage
+        let adminAddedProducts = [];
+        try {
+            const adminResponse = await fetch('data/admin-products.json');
+            const adminData = await adminResponse.json();
+            adminAddedProducts = adminData.adminProducts || [];
+            console.log('Loaded admin products from centralized file:', adminAddedProducts.length, 'products');
+        } catch (adminError) {
+            console.warn('Could not load admin products file, using localStorage fallback:', adminError.message);
+            const localStorageAdminProducts = localStorage.getItem('adminProducts');
+            if (localStorageAdminProducts) {
+                adminAddedProducts = JSON.parse(localStorageAdminProducts);
+                console.log('Loaded admin products from localStorage fallback:', adminAddedProducts.length, 'products');
             }
         }
+        
+        // Merge base products with admin products, avoiding duplicates
+        const existingIds = new Set(baseProducts.map(p => p.id));
+        const newAdminProducts = adminAddedProducts.filter(p => !existingIds.has(p.id));
+        
+        products = [...baseProducts, ...newAdminProducts];
+        console.log('Total products loaded:', baseProducts.length, 'base +', newAdminProducts.length, 'admin =', products.length, 'total');
+        
     } catch (error) {
         console.error('Error loading products:', error);
         products = [];
@@ -80,24 +93,55 @@ function loadOrders() {
     }
 }
 
-// Save products to localStorage and update JSON file
+// Save products to centralized system and identify admin-added products
 async function saveProducts() {
-    localStorage.setItem('adminProducts', JSON.stringify(products));
+    // Load base products to identify which ones are admin-added
+    let baseProducts = [];
+    try {
+        const response = await fetch('data/products.json');
+        const data = await response.json();
+        baseProducts = data.products || [];
+    } catch (error) {
+        console.warn('Could not load base products for comparison');
+    }
+    
+    // Identify admin-added products (those not in base products)
+    const baseIds = new Set(baseProducts.map(p => p.id));
+    const adminAddedProducts = products.filter(p => !baseIds.has(p.id));
+    
+    // Save admin products to centralized file format
+    const adminData = {
+        adminProducts: adminAddedProducts,
+        lastUpdated: new Date().toISOString(),
+        version: "1.0"
+    };
+    
+    // Save to localStorage as backup
+    localStorage.setItem('adminProducts', JSON.stringify(adminAddedProducts));
     displayProducts();
     
-    // Create a blob and download to simulate updating file
-    const jsonStr = JSON.stringify({ products: products }, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
+    // Download admin-products.json for manual upload to GitHub
+    const adminJsonStr = JSON.stringify(adminData, null, 2);
+    const adminBlob = new Blob([adminJsonStr], { type: 'application/json' });
+    const adminUrl = URL.createObjectURL(adminBlob);
     
-    // Create download link
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'products.json';
-    link.click();
+    const adminLink = document.createElement('a');
+    adminLink.href = adminUrl;
+    adminLink.download = 'admin-products.json';
+    adminLink.click();
+    
+    // Also download complete products file for backup
+    const completeJsonStr = JSON.stringify({ products: products }, null, 2);
+    const completeBlob = new Blob([completeJsonStr], { type: 'application/json' });
+    const completeUrl = URL.createObjectURL(completeBlob);
+    
+    const completeLink = document.createElement('a');
+    completeLink.href = completeUrl;
+    completeLink.download = 'products-backup.json';
+    completeLink.click();
     
     // Show notification about file update
-    showNotification('Products saved! Download updated products.json file and refresh main store.');
+    showNotification(`✅ Products saved! ${adminAddedProducts.length} admin products ready. Upload admin-products.json to GitHub to make products visible across ALL devices.`);
 }
 
 // Save orders to localStorage

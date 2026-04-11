@@ -65,38 +65,48 @@ async function loadProducts() {
             return;
         }
         
-        // First check if there are admin updates in localStorage
-        const adminProducts = localStorage.getItem('adminProducts');
-        console.log('Admin products in localStorage:', adminProducts ? 'Found' : 'Not found');
+        // Load base products from JSON file first
+        let baseProducts = [];
+        try {
+            const response = await fetch('data/products.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            baseProducts = data.products || [];
+            console.log('✅ Loaded base products from JSON file:', baseProducts.length, 'products');
+        } catch (fetchError) {
+            console.warn('⚠️ Could not load base products:', fetchError.message);
+            baseProducts = [];
+        }
         
-        if (adminProducts) {
-            const parsedProducts = JSON.parse(adminProducts);
-            if (parsedProducts.length === 0) {
-                console.log('🗑️ Admin products is empty, using empty array');
-                products = [];
-            } else {
-                products = parsedProducts;
-                console.log('✅ Loaded products from admin localStorage:', products.length, 'products');
-                console.log('Product sample:', products[0]);
+        // Then check for admin-added products from centralized file
+        let adminProducts = [];
+        try {
+            const adminResponse = await fetch('data/admin-products.json');
+            const adminData = await adminResponse.json();
+            adminProducts = adminData.adminProducts || [];
+            console.log('✅ Loaded admin products from centralized file:', adminProducts.length, 'products');
+        } catch (adminError) {
+            console.warn('⚠️ Could not load admin products file, checking localStorage fallback:', adminError.message);
+            // Fallback to localStorage for backward compatibility
+            const localStorageAdminProducts = localStorage.getItem('adminProducts');
+            if (localStorageAdminProducts) {
+                adminProducts = JSON.parse(localStorageAdminProducts);
+                console.log('✅ Loaded admin products from localStorage fallback:', adminProducts.length, 'products');
             }
-        } else {
-            console.log('No admin products found, checking other sources...');
+        }
+        
+        if (adminProducts.length > 0) {
+            // Merge base products with admin products, avoiding duplicates
+            const existingIds = new Set(baseProducts.map(p => p.id));
+            const newAdminProducts = adminProducts.filter(p => !existingIds.has(p.id));
             
-            // Try to load from products.json file (server environment)
-            try {
-                const response = await fetch('data/products.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                products = data.products || [];
-                console.log('✅ Loaded products from JSON file:', products.length, 'products');
-            } catch (fetchError) {
-                console.warn('⚠️ Fetch error, using empty products due to clear flag:', fetchError.message);
-                // Use empty products instead of hardcoded fallback
-                products = [];
-                console.log('🗑️ Using empty products array');
-            }
+            products = [...baseProducts, ...newAdminProducts];
+            console.log('✅ Merged products:', baseProducts.length, 'base +', newAdminProducts.length, 'admin =', products.length, 'total');
+        } else {
+            products = baseProducts;
+            console.log('✅ Using base products only (no admin products):', products.length, 'products');
         }
         
         console.log('🎯 Final products loaded:', products.length, 'products');
