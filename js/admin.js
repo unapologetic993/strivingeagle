@@ -60,7 +60,7 @@ function loadOrders() {
     }
 }
 
-// Save products to centralized system and identify admin-added products
+// Save products to centralized system and automatically sync to GitHub
 async function saveProducts() {
     // Load base products to identify which ones are admin-added
     let baseProducts = [];
@@ -76,16 +76,27 @@ async function saveProducts() {
     const baseIds = new Set(baseProducts.map(p => p.id));
     const adminAddedProducts = products.filter(p => !baseIds.has(p.id));
     
-    // Save admin products to centralized file format
+    // Save to localStorage as backup
+    localStorage.setItem('adminProducts', JSON.stringify(adminAddedProducts));
+    displayProducts();
+    
+    // Try automatic GitHub sync first
+    if (typeof githubSync !== 'undefined') {
+        try {
+            await githubSync.syncAdminProducts(adminAddedProducts);
+            console.log('✅ Automatic GitHub sync completed');
+            return; // Success, no need for manual download
+        } catch (syncError) {
+            console.warn('Automatic sync failed, falling back to manual download:', syncError);
+        }
+    }
+    
+    // Fallback: Download files for manual upload
     const adminData = {
         adminProducts: adminAddedProducts,
         lastUpdated: new Date().toISOString(),
         version: "1.0"
     };
-    
-    // Save to localStorage as backup
-    localStorage.setItem('adminProducts', JSON.stringify(adminAddedProducts));
-    displayProducts();
     
     // Download admin-products.json for manual upload to GitHub
     const adminJsonStr = JSON.stringify(adminData, null, 2);
@@ -108,7 +119,7 @@ async function saveProducts() {
     completeLink.click();
     
     // Show notification about file update
-    showNotification(`✅ Products saved! ${adminAddedProducts.length} admin products ready. Upload admin-products.json to GitHub to make products visible across ALL devices.`);
+    showNotification(`⚠️ Auto-sync unavailable. ${adminAddedProducts.length} admin products downloaded. Upload admin-products.json to GitHub manually.`);
 }
 
 // Save orders to localStorage
