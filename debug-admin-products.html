@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Admin Products - Striving Eagle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .success { color: #28a745; font-weight: bold; }
+        .error { color: #dc3545; font-weight: bold; }
+        .warning { color: #ffc107; font-weight: bold; }
+        .info { color: #007bff; font-weight: bold; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Admin Products Loading</h1>
+    
+    <div class="debug-section">
+        <h2>📊 Loading Status</h2>
+        <div id="loading-status">Checking...</div>
+        <button onclick="checkAdminProducts()">🔄 Refresh Admin Products</button>
+        <button onclick="clearCache()">🗑️ Clear Cache & Reload</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>📁 Admin Products File</h2>
+        <div id="admin-file-info">Loading...</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>📦 Base Products</h2>
+        <div id="base-products-info">Loading...</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🛍️ Admin Products</h2>
+        <div id="admin-products-info">Loading...</div>
+        <div id="admin-products-list"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🎯 Combined Products</h2>
+        <div id="combined-products-info">Loading...</div>
+        <div id="combined-products-list"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🔧 Console Logs</h2>
+        <div id="console-logs">
+            <pre id="log-output">Console logs will appear here...</pre>
+        </div>
+    </div>
+
+    <script>
+        // Capture console logs
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+        
+        const logOutput = document.getElementById('log-output');
+        
+        function addToLog(type, ...args) {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            logOutput.textContent += `[${timestamp}] ${type.toUpperCase()}: ${message}\n`;
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToLog('log', ...args);
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addToLog('warn', ...args);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToLog('error', ...args);
+        };
+
+        let baseProducts = [];
+        let adminProducts = [];
+        let combinedProducts = [];
+
+        async function checkAdminProducts() {
+            console.log('🔍 Starting admin products debug check...');
+            
+            // Check admin products file
+            try {
+                const adminResponse = await fetch('data/admin-products.json');
+                console.log('Admin file response status:', adminResponse.status);
+                
+                if (adminResponse.ok) {
+                    const adminData = await adminResponse.json();
+                    adminProducts = adminData.adminProducts || [];
+                    document.getElementById('admin-file-info').innerHTML = 
+                        `<span class="success">✅ Admin file loaded successfully</span><br>
+                         <strong>Last Updated:</strong> ${adminData.lastUpdated || 'Never'}<br>
+                         <strong>Version:</strong> ${adminData.version || 'Unknown'}<br>
+                         <strong>Admin Products Count:</strong> ${adminProducts.length}`;
+                    console.log('✅ Admin products loaded:', adminProducts.length);
+                } else {
+                    throw new Error(`HTTP ${adminResponse.status}: ${adminResponse.statusText}`);
+                }
+            } catch (error) {
+                document.getElementById('admin-file-info').innerHTML = 
+                    `<span class="error">❌ Failed to load admin file: ${error.message}</span>`;
+                console.error('❌ Admin file error:', error);
+            }
+
+            // Check base products
+            try {
+                const baseResponse = await fetch('data/products.json');
+                console.log('Base file response status:', baseResponse.status);
+                
+                if (baseResponse.ok) {
+                    const baseData = await baseResponse.json();
+                    baseProducts = baseData.products || [];
+                    document.getElementById('base-products-info').innerHTML = 
+                        `<span class="success">✅ Base products loaded: ${baseProducts.length} products</span>`;
+                    console.log('✅ Base products loaded:', baseProducts.length);
+                } else {
+                    throw new Error(`HTTP ${baseResponse.status}: ${baseResponse.statusText}`);
+                }
+            } catch (error) {
+                document.getElementById('base-products-info').innerHTML = 
+                    `<span class="error">❌ Failed to load base products: ${error.message}</span>`;
+                console.error('❌ Base products error:', error);
+            }
+
+            // Combine products
+            const existingIds = new Set(baseProducts.map(p => p.id));
+            const newAdminProducts = adminProducts.filter(p => !existingIds.has(p.id));
+            combinedProducts = [...baseProducts, ...newAdminProducts];
+
+            document.getElementById('admin-products-info').innerHTML = 
+                `<span class="info">📊 Admin Products: ${adminProducts.length}</span>`;
+            
+            document.getElementById('combined-products-info').innerHTML = 
+                `<span class="success">🎯 Combined Products: ${combinedProducts.length}</span><br>
+                 <strong>Base:</strong> ${baseProducts.length} + <strong>New Admin:</strong> ${newAdminProducts.length}`;
+
+            // Display admin products
+            const adminListHtml = adminProducts.map(product => `
+                <div class="product-card">
+                    <strong>ID:</strong> ${product.id}<br>
+                    <strong>Name:</strong> ${product.name}<br>
+                    <strong>Price:</strong> MWK ${product.price?.toLocaleString()}<br>
+                    <strong>Category:</strong> ${product.category}<br>
+                    <strong>Gender:</strong> ${product.gender}
+                </div>
+            `).join('');
+            document.getElementById('admin-products-list').innerHTML = adminListHtml || '<p>No admin products found</p>';
+
+            // Display combined products sample
+            const combinedSample = combinedProducts.slice(0, 5);
+            const combinedListHtml = combinedSample.map(product => `
+                <div class="product-card">
+                    <strong>ID:</strong> ${product.id}<br>
+                    <strong>Name:</strong> ${product.name}<br>
+                    <strong>Price:</strong> MWK ${product.price?.toLocaleString()}<br>
+                    <strong>Category:</strong> ${product.category}<br>
+                    <strong>Gender:</strong> ${product.gender}
+                </div>
+            `).join('');
+            document.getElementById('combined-products-list').innerHTML = 
+                combinedListHtml + (combinedProducts.length > 5 ? `<p><em>... and ${combinedProducts.length - 5} more products</em></p>` : '');
+
+            // Update loading status
+            document.getElementById('loading-status').innerHTML = 
+                `<span class="success">✅ Debug check completed!</span><br>
+                 Total products available: ${combinedProducts.length}`;
+            
+            console.log('🎯 Debug check completed. Total products:', combinedProducts.length);
+        }
+
+        function clearCache() {
+            console.log('🗑️ Clearing cache and reloading...');
+            localStorage.clear();
+            location.reload(true);
+        }
+
+        // Auto-run on page load
+        document.addEventListener('DOMContentLoaded', checkAdminProducts);
+    </script>
+</body>
+</html>
