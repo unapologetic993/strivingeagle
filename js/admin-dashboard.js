@@ -93,7 +93,7 @@ function loadOrders() {
     }
 }
 
-// Save products to centralized system and automatically sync to GitHub
+// Save products to centralized system and automatically download files
 async function saveProducts() {
     // Load base products to identify which ones are admin-added
     let baseProducts = [];
@@ -113,25 +113,15 @@ async function saveProducts() {
     localStorage.setItem('adminProducts', JSON.stringify(adminAddedProducts));
     displayProducts();
     
-    // Try automatic GitHub sync first
-    if (typeof githubSync !== 'undefined') {
-        try {
-            await githubSync.syncAdminProducts(adminAddedProducts);
-            console.log('✅ Automatic GitHub sync completed');
-            return; // Success, no need for manual download
-        } catch (syncError) {
-            console.warn('Automatic sync failed, falling back to manual download:', syncError);
-        }
-    }
-    
-    // Fallback: Download files for manual upload
+    // Create admin products data for download
     const adminData = {
         adminProducts: adminAddedProducts,
         lastUpdated: new Date().toISOString(),
-        version: "1.0"
+        version: "1.0",
+        autoDownload: true
     };
     
-    // Download admin-products.json for manual upload to GitHub
+    // ALWAYS download admin-products.json file
     const adminJsonStr = JSON.stringify(adminData, null, 2);
     const adminBlob = new Blob([adminJsonStr], { type: 'application/json' });
     const adminUrl = URL.createObjectURL(adminBlob);
@@ -140,6 +130,20 @@ async function saveProducts() {
     adminLink.href = adminUrl;
     adminLink.download = 'admin-products.json';
     adminLink.click();
+    
+    // Try automatic GitHub sync (but still keep the download)
+    if (typeof githubSync !== 'undefined') {
+        try {
+            await githubSync.syncAdminProducts(adminAddedProducts);
+            console.log('✅ Automatic GitHub sync completed');
+            showNotification(`✅ ${adminAddedProducts.length} admin products downloaded AND synced to GitHub!`);
+        } catch (syncError) {
+            console.warn('Automatic sync failed, but file downloaded:', syncError);
+            showNotification(`📁 ${adminAddedProducts.length} admin products downloaded! Upload admin-products.json to GitHub manually.`);
+        }
+    } else {
+        showNotification(`📁 ${adminAddedProducts.length} admin products downloaded! Upload admin-products.json to GitHub manually.`);
+    }
     
     // Also download complete products file for backup
     const completeJsonStr = JSON.stringify({ products: products }, null, 2);
@@ -150,9 +154,6 @@ async function saveProducts() {
     completeLink.href = completeUrl;
     completeLink.download = 'products-backup.json';
     completeLink.click();
-    
-    // Show notification about file update
-    showNotification(`⚠️ Auto-sync unavailable. ${adminAddedProducts.length} admin products downloaded. Upload admin-products.json to GitHub manually.`);
 }
 
 // Save orders to localStorage
